@@ -93,7 +93,7 @@ export default function HeroSection() {
             >
               <h1 className="mb-6 animate-in fade-in slide-in-from-bottom-8 text-6xl font-light leading-[1.1] tracking-tight text-foreground duration-1000 md:text-7xl lg:text-8xl">
                 <span className=" my-4 py-2 inline-block ">
-                  Khám bệnh đơn giản cùng{" "}<PointerHighlight containerClassName="inline-block">MediFlow</PointerHighlight>
+                  Khám bệnh đơn giản cùng{" "}<PointerHighlight containerClassName="inline-block mt-4">MediFlow</PointerHighlight>
                 </span>
               </h1>
 
@@ -104,12 +104,9 @@ export default function HeroSection() {
                 className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
               >
                 Trải nghiệm khám bệnh thông minh với{" "}
-                <motion.span
-                  className="relative inline-block font-semibold text-blue-600 dark:text-blue-400"
-                  whileHover={{ scale: 1.1 }}
-                >
+                <Highlight>
                   trợ lí AI cá nhân hóa
-                </motion.span>
+                </Highlight>
               </motion.p>
             </motion.div>
 

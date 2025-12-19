@@ -183,9 +183,9 @@ export function InputForm() {
                 </div>
 
                 {isCityDropdownOpen && (
-                  <div className="absolute z-20 w-full bg-white border rounded-md mt-1">
+                  <div className="absolute z-20  w-full bg-white border rounded-md mt-1">
                     <input
-                      className="w-full p-2 border-b outline-none"
+                      className="rounded-full w-full p-2 border-b outline-none"
                       placeholder="Tìm thành phố..."
                       value={citySearch}
                       onChange={(e) => setCitySearch(e.target.value)}
@@ -258,7 +258,7 @@ export function InputForm() {
         </div>
         <button
           type="submit"
-          className="w-full h-10 rounded-md bg-black text-white hover:opacity-90"
+          className="w-full h-10 rounded-full border-2 border-white bg-gradient-to-r rounded-full from-blue-600/80 to-green-600/10  hover:from-blue-300 hover:to-green-400 text-white text-lg group"
         >
           Tiếp tục →
         </button>

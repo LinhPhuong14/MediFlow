@@ -120,12 +120,12 @@
   --sidebar-accent-foreground: #1e3a8a;
   --sidebar-border: #f5f9ff;
   --sidebar-ring: #3b82f6;
-  --shadow-x: 0px;
-  --shadow-y: 1px;
+  --shadow-x: 2px;
+  --shadow-y: 2px;
   --shadow-blur: 2px;
-  --shadow-spread: 0px;
+  --shadow-spread: 2px;
   --shadow-opacity: 0.05;
-  --shadow-color: #000000;
+  --shadow-color: #0d353e;
   --font-inter: "Inter", sans-serif;
 }
 
