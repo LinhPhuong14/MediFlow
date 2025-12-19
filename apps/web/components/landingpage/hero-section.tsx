@@ -121,7 +121,7 @@ export default function HeroSection() {
             >
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-8 py-4 text-lg group"
+                className="shadow-3xl border-2 border-white bg-gradient-to-r rounded-full from-blue-600/80 to-green-600/10  hover:from-blue-300 hover:to-green-400 text-white px-8 py-4 text-lg group"
               >
                 <a href="/patient/register" className="flex items-center">
                   Bắt đầu
