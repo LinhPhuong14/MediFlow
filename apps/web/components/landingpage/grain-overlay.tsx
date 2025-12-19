@@ -7,5 +7,5 @@ export function GrainOverlay() {
         mixBlendMode: "overlay",
       }}
     />
-  )
+  );
 }
