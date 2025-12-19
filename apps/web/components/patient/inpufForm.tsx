@@ -138,7 +138,7 @@ export function InputForm() {
       detailAddress,
     });
     //redirect to chatbot
-    window.location.href = "patient/chatbot";
+    window.location.href = "./chatbot";
   };
 
   return (
