@@ -15,6 +15,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { MailModule } from '../mail/mail.module';
+import { PasswordService } from './password.service';
 
 @Module({
   imports: [
@@ -25,10 +26,10 @@ import { MailModule } from '../mail/mail.module';
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { 
-          expiresIn: configService.get<string>('JWT_EXPIRY') || '3d' 
+          expiresIn: configService.get<string>('JWT_EXPIRY', '3d')
         },
       }),
       inject: [ConfigService],
@@ -42,6 +43,7 @@ import { MailModule } from '../mail/mail.module';
   controllers: [AuthController, PasswordController, OAuthController],
   providers: [
     AuthService,
+    PasswordService,
     JwtStrategy,
     GoogleStrategy,
     JwtAuthGuard,

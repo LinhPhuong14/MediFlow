@@ -40,7 +40,7 @@ export function HeroSection() {
       <section className=" min-h-screen flex items-center justify-center px-4 relative">
         <div className="max-w-4xl mx-auto text-center relative z-10 animate-fade-in-hero">
           {/* Badge */}
-          <div className="inline-flex text-teal-950 items-center px-4 py-2 rounded-full bg-white/30 backdrop-blur-md border border-white/20 text-sm font-medium mb-8 mt-12 animate-fade-in-badge">
+          <div className="inline-flex text-teal-950 items-center px-4 py-2 rounded-full bg-white/30 backdrop-blur-md border border-white/20 text-sm font-light mb-8 mt-12 animate-fade-in-badge">
             <span className="w-2 h-2 text-lime-900 bg-lime-600/60 rounded-full mr-2 animate-pulse"></span>
             Quy trình thông minh cho bệnh viện
           </div>

@@ -73,14 +73,14 @@ export function ProblemSolutionSection() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium mb-6">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-teal-950 text-sm font-light mb-6">
             <span className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>
             Vấn đề bệnh viện đang gặp phải
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-balance mb-4 sm:mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-teal-950 text-balance mb-4 sm:mb-6">
             <span className="text-red-700">35-40%</span> Thời gian của bác sĩ bị lãng phí cho công việc hành chính
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="text-base sm:text-md md:text-lg text-teal-950/70 max-w-4xl mx-auto font-light leading-relaxed">
             MediFlow giúp tự động hóa các tác vụ lặp đi lặp lại, giải phóng thời gian quý báu cho bác sĩ.
           </p>
         </div>
