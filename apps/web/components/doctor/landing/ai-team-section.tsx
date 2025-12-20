@@ -96,12 +96,18 @@ const conversations = [
     ],
   },
 ]
+type ChatMessage = {
+  text: string
+  sender: "customer" | "ai"
+  delay: number
+}
+
 
 export function AITeamSection() {
   const sectionRef = useRef<HTMLElement>(null) // Added section ref for intersection observer
   const [isVisible, setIsVisible] = useState(false)
   const [currentConversation, setCurrentConversation] = useState(0)
-  const [displayedMessages, setDisplayedMessages] = useState<any[]>([])
+  const [displayedMessages, setDisplayedMessages] = useState<ChatMessage[]>([])
   const [isTyping, setIsTyping] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
