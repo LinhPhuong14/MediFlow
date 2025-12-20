@@ -335,7 +335,6 @@ const tutorials = [
   },
 ];
 
-
 // Sample data for sidebar navigation
 const sidebarItems = [
   {
@@ -347,7 +346,7 @@ const sidebarItems = [
     title: "MediVoice",
     icon: <Layers />,
     items: [
-      { title: "Báo cáo", url: "#"},
+      { title: "Báo cáo", url: "#" },
       { title: "File ghi âm", url: "#" },
     ],
   },
@@ -453,14 +452,7 @@ export default function HomeDashboard() {
                       {item.icon}
                       <span>{item.title}</span>
                     </div>
-                    {item.badge && (
-                      <Badge
-                        variant="outline"
-                        className="ml-auto rounded-full px-2 py-0.5 text-xs"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
+
                     {item.items && (
                       <ChevronDown
                         className={cn(
@@ -480,14 +472,6 @@ export default function HomeDashboard() {
                           className="flex items-center justify-between rounded-2xl px-3 py-2 text-sm hover:bg-muted"
                         >
                           {subItem.title}
-                          {subItem.badge && (
-                            <Badge
-                              variant="outline"
-                              className="ml-auto rounded-full px-2 py-0.5 text-xs"
-                            >
-                              {subItem.badge}
-                            </Badge>
-                          )}
                         </a>
                       ))}
                     </div>
@@ -496,8 +480,6 @@ export default function HomeDashboard() {
               ))}
             </div>
           </ScrollArea>
-
-          
         </div>
       </div>
 
@@ -523,7 +505,6 @@ export default function HomeDashboard() {
             </div>
           </div>
 
-
           <ScrollArea className="flex-1 px-3 py-2">
             <div className="space-y-1">
               {sidebarItems.map((item) => (
@@ -541,14 +522,7 @@ export default function HomeDashboard() {
                       {item.icon}
                       <span>{item.title}</span>
                     </div>
-                    {item.badge && (
-                      <Badge
-                        variant="outline"
-                        className="ml-auto rounded-full px-2 py-0.5 text-xs"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
+
                     {item.items && (
                       <ChevronDown
                         className={cn(
@@ -568,14 +542,6 @@ export default function HomeDashboard() {
                           className="flex items-center justify-between rounded-2xl px-3 py-2 text-sm hover:bg-muted"
                         >
                           {subItem.title}
-                          {subItem.badge && (
-                            <Badge
-                              variant="outline"
-                              className="ml-auto rounded-full px-2 py-0.5 text-xs"
-                            >
-                              {subItem.badge}
-                            </Badge>
-                          )}
                         </a>
                       ))}
                     </div>
@@ -584,8 +550,6 @@ export default function HomeDashboard() {
               ))}
             </div>
           </ScrollArea>
-
-          
         </div>
       </div>
 
@@ -726,15 +690,12 @@ export default function HomeDashboard() {
                                   </div>
                                 </CardDescription>
                               </CardContent>
-                    
                             </Card>
                           </motion.div>
                         ))}
                     </div>
                   </section>
-
                 </TabsContent>
-
               </motion.div>
             </AnimatePresence>
           </Tabs>
