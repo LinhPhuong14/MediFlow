@@ -1,15 +1,26 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 
 import { useState, useEffect, useRef } from "react"
 import { MessageCircle, Clock, Zap } from "lucide-react"
 
-const conversations = [
+type Conversation = {
+  title: string
+  messages: ChatMessage[]
+}
+
+const conversations: Conversation[] = [
   {
     title: "Luxury Sedan Inquiry & Test Drive Booking",
     messages: [
-      { text: "Hi! I'm interested in the new Premium Sedan. Do you have any in stock?", sender: "customer", delay: 0 },
       {
-        text: "We have several 2024 Premium Sedans available. Are you looking for a specific trim level or color?",
+        text: "Hi! I'm interested in the new Premium Sedan. Do you have any in stock?",
+        sender: "customer",
+        delay: 0,
+      },
+      {
+        text: "We have several 2024 Premium Sedans available...",
         sender: "ai",
         delay: 1000,
       },
