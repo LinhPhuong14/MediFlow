@@ -9,7 +9,7 @@ const navigation = [
   { name: "Tính năng", href: "#features" },
   { name: "Barbers & Salons", href: "#ai-team" },
   { name: "Restaurants", href: "#testimonials" },
-  { name: "Liên hệ", href: "/car-dealerships" },
+  { name: "Liên hệ", href: "#footer" },
 ]
 
 export function GlassmorphismNav() {
@@ -112,7 +112,7 @@ export function GlassmorphismNav() {
       >
         {/* Main Navigation */}
         <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2">
+          <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2">
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link
@@ -125,32 +125,24 @@ export function GlassmorphismNav() {
               </Link>
 
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-8">
+              <div className=" hidden md:flex items-center space-x-8">
                 {navigation.map((item) =>
-                  item.href.startsWith("/") ? (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="text-white/80 hover:text-white hover:scale-105 transition-all duration-200 font-medium cursor-pointer"
-                    >
-                      {item.name}
-                    </Link>
-                  ) : (
+                  
                     <button
                       key={item.name}
                       onClick={() => scrollToSection(item.href)}
-                      className="text-white/80 hover:text-white hover:scale-105 transition-all duration-200 font-medium cursor-pointer"
+                      className="text-teal-800 hover:text-white hover:scale-105 transition-all duration-200 font-medium cursor-pointer"
                     >
                       {item.name}
                     </button>
-                  ),
+            
                 )}
               </div>
 
               {/* Desktop CTA Button */}
               <div className="hidden md:block">
                 <button
-                  className="relative bg-sky-950 text-white hover:text-black hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group"
+                  className="relative bg-teal-800 text-white hover:text-black hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group"
                   onClick={() => scrollToSection("#contact")}
                 >
                   <span className="mr-2">Đăng nhập</span>

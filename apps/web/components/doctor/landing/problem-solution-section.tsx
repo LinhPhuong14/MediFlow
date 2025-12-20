@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useRef, useState } from "react"
 
 const AlertTriangle = () => (
-  <svg className="h-6 w-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -15,7 +15,7 @@ const AlertTriangle = () => (
 )
 
 const CheckCircle = () => (
-  <svg className="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <svg className="h-5 w-5 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -65,7 +65,7 @@ export function ProblemSolutionSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="py-16 bg-cyan-600/50 sm:py-24 px-4 relative z-10">
+    <section ref={sectionRef} className="py-16 sm:py-24 px-4 relative z-10">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div
@@ -74,14 +74,14 @@ export function ProblemSolutionSection() {
           }`}
         >
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium mb-6">
-            <span className="w-2 h-2 bg-red-400 rounded-full mr-2 animate-pulse"></span>
-            The Problem Every Business Faces
+            <span className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>
+            Vấn đề bệnh viện đang gặp phải
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-balance mb-4 sm:mb-6">
-            <span className="text-red-400">60-70%</span> of Your Leads Are Slipping Away
+            <span className="text-red-700">35-40%</span> Thời gian của bác sĩ bị lãng phí cho công việc hành chính
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto font-light leading-relaxed">
-            While you're busy serving customers, your online inquiries are going unanswered. Here's how we fix it.
+            MediFlow giúp tự động hóa các tác vụ lặp đi lặp lại, giải phóng thời gian quý báu cho bác sĩ.
           </p>
         </div>
 
@@ -93,12 +93,12 @@ export function ProblemSolutionSection() {
         >
           {/* Problem Card */}
           <div className="group">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 h-full hover:bg-white/10 transition-all duration-500 hover:border-red-400/30">
+            <div className="bg-white/5 backdrop-blur-md border border-white/40 border-2 rounded-2xl p-6 sm:p-8 h-full hover:bg-white/30 transition-all duration-500 hover:border-white/90">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-lg bg-red-500/20">
+                <div className="p-2 rounded-lg bg-white/20">
                   <AlertTriangle />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-red-400">The Reality</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-red-700">Thực trạng</h3>
               </div>
 
               {/* Key Stat */}

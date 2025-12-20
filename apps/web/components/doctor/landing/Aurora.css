@@ -3,7 +3,9 @@
   height: 50%;
   position: absolute;
   top: 0;
-  opacity: 0.7;
+  opacity: 0.4;
+  overflow: hidden;
+  z-index: 0;
 }
 
 /* Remove canvas styling to let WebGL renderer handle sizing */

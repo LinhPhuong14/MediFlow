@@ -24,19 +24,19 @@ const AnimatedChatDemo = ({ isActive }: { isActive: boolean }) => {
 
     const scenarios = [
       [
-        { text: "Hi! How can I help you today?", isBot: true },
-        { text: "I'd like to book an appointment", isBot: false },
-        { text: "Perfect! I can help with that. What service are you interested in?", isBot: true },
+        { text: "Chào bạn, mình là MediFlow", isBot: true },
+        { text: "Tôi muốn khám bệnh", isBot: false },
+        { text: "Bạn đang cảm thấy không khỏe ở đâu, hãy mô tả triệu chứng cho mình nghe", isBot: true },
       ],
       [
-        { text: "Hello! I'm available 24/7 to assist you.", isBot: true },
-        { text: "Do you have weekend availability?", isBot: false },
-        { text: "I can check our weekend slots for you.", isBot: true },
+        { text: "Tôi bị sốt", isBot: false },
+        { text: "Bạn sốt bao nhiêu độ, có đi kèm các triệu chứng đau người, đi ngoài, nôn không?", isBot: true },
+        { text: "Tôi sốt 39 độ và đau họng", isBot: false },
       ],
       [
-        { text: "Good evening! How may I assist you?", isBot: true },
-        { text: "I need help with pricing", isBot: false },
-        { text: "I'd be happy to provide pricing information right away!", isBot: true },
+        { text: "Chào bạn, MediFlow có thể hỗ trợ gì cho bạn", isBot: true },
+        { text: "Tôi cần giấy khám sức khỏe để làm sơ yếu lí lịch", isBot: false },
+        { text: "Okay, mình sẽ đăng ký lấy số và thông báo cho bạn khi đến lượt", isBot: true },
       ],
     ]
 
@@ -70,12 +70,12 @@ const AnimatedChatDemo = ({ isActive }: { isActive: boolean }) => {
   }, [isActive, cycleCount])
 
   return (
-    <div className="bg-slate-50 rounded-lg p-4 h-32 overflow-hidden relative">
+    <div className="bg-slate-50 rounded-lg p-4 h-40 overflow-hidden relative">
       <div className="absolute top-2 right-2 flex items-center gap-1">
         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
         <span className="text-xs text-slate-500 font-medium">24/7</span>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2 mt-4">
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -209,9 +209,9 @@ const AnimatedCalendarDemo = ({ isActive }: { isActive: boolean }) => {
 
 const AnimatedEmailDemo = ({ isActive }: { isActive: boolean }) => {
   const [emails, setEmails] = useState([
-    { subject: "Service inquiry", status: "unread" },
-    { subject: "Appointment request", status: "unread" },
-    { subject: "Quote needed", status: "unread" },
+    { subject: "Nguyen Van A - Đau bụng, đi ngoài ra máu - 12:00, 20/12/2025", status: "unread" },
+    { subject: "Nguyen Van B - Ợ hơi, đau dạ dày - 12:14, 20/12/2025", status: "unread" },
+    { subject: "Nguyen Van C - Khám bệnh tổng quát - 13:00, 20/12/2025", status: "unread" },
   ])
 
   useEffect(() => {
@@ -361,17 +361,17 @@ const AnimatedIntegrationsDemo = ({ isActive }: { isActive: boolean }) => {
 
 const features = [
   {
-    title: "24/7 AI Chat Support",
+    title: "MediFlow AI Chatbot",
     description:
-      "Intelligent chatbots that handle customer inquiries, answer questions, and capture leads across your website and social channels.",
+      "Hỗ trợ tiếp đón, tư vấn và đặt lịch khám tự động, giải đáp mọi thắc mắc 24/7",
     demo: AnimatedChatDemo,
     size: "large",
   },
   {
-    title: "AI Phone Receptionist",
+    title: "Multi-Platform Integration",
     description:
-      "Professional AI voice assistant that answers calls, takes messages, and books appointments when you're busy or closed.",
-    demo: AnimatedPhoneDemo,
+      "Connect with your existing tools including CRM, calendar, WhatsApp, SMS, and more for a unified customer experience.",
+    demo: AnimatedIntegrationsDemo,
     size: "medium",
   },
   {
@@ -382,26 +382,13 @@ const features = [
     size: "medium",
   },
   {
-    title: "Email Response Automation",
+    title: "Danh sách khám bệnh tự động",
     description:
-      "AI-powered email assistant that responds to inquiries, provides information, and forwards complex queries to your team.",
+      "Cập nhật danh sách khám chữa tự động cho bác sĩ, tự động sắp xếp ưu tiên theo mức độ khẩn cấp.",
     demo: AnimatedEmailDemo,
     size: "large",
   },
-  {
-    title: "Lead Qualification & Handoff",
-    description:
-      "Intelligent system that qualifies prospects, gathers key information, and seamlessly hands off hot leads to your sales team.",
-    demo: AnimatedLeadsDemo,
-    size: "medium",
-  },
-  {
-    title: "Multi-Platform Integration",
-    description:
-      "Connect with your existing tools including CRM, calendar, WhatsApp, SMS, and more for a unified customer experience.",
-    demo: AnimatedIntegrationsDemo,
-    size: "medium",
-  },
+  
 ]
 
 export function FeaturesSection() {
@@ -494,7 +481,7 @@ export function FeaturesSection() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className={`group transition-all duration-1000 ${feature.size === "large" ? "md:col-span-2" : ""}`}
+                className={`group transition-all duration-1000 ${feature.size === "large" ? "md:col-span-3" : ""}`}
                 style={{
                   transitionDelay: isVisible ? `${300 + index * 100}ms` : "0ms",
                 }}

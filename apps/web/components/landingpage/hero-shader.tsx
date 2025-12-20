@@ -1,6 +1,7 @@
 "use client"
 import { memo, useEffect, useRef, useState } from "react"
 import { Shader, Swirl, ChromaFlow } from "shaders/react"
+import ShaderBackground from "./shader-background";
 
 function HeroShader() {
   const shaderContainerRef = useRef<HTMLDivElement>(null);
@@ -45,31 +46,19 @@ function HeroShader() {
         style={{ contain: "strict" }}
       >
         <Shader className="h-full w-full">
-          <Swirl
-            colorA="#16adffff"
-            colorB="#6ef98cff"
-            speed={0.8}
-            detail={0.8}
-            blend={50}
-            coarseX={40}
-            coarseY={40}
-            mediumX={40}
-            mediumY={40}
-            fineX={40}
-            fineY={40}
-          />
+          <ShaderBackground>
           <ChromaFlow
-            baseColor="#67caffff"
-            upColor="#4773b4ff"
+            baseColor="#b3e4ffff"
+            upColor="#e5d0ffff"
             downColor="#dcf8cbff"
-            leftColor="#6ef98cff"
-            rightColor="#36e19aff"
+            leftColor="#6ef9e2ff"
+            rightColor="#c5faadff"
             intensity={0.9}
             radius={1.8}
             momentum={25}
             maskType="alpha"
             opacity={0.97}
-          />
+          /></ShaderBackground>
         </Shader>
       </div>
 
