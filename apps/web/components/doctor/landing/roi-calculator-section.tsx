@@ -43,7 +43,7 @@ export function ROICalculatorSection() {
     return () => observer.disconnect()
   }, [])
 
-  const getBusinessDefaults = () => {
+  const getBusinessDefaults = (type?: string) => {
     const businessDefaults = {
       ecommerce: { avgOrder: 85, maxOrder: 500, conversion: 35, response: 80, satisfaction: 45 },
       retail: { avgOrder: 65, maxOrder: 300, conversion: 30, response: 75, satisfaction: 40 },
@@ -55,15 +55,13 @@ export function ROICalculatorSection() {
       default: { avgOrder: 150, maxOrder: 2000, conversion: 35, response: 80, satisfaction: 45 },
     }
 
-    return businessDefaults[inputs.businessType as keyof typeof businessDefaults] || businessDefaults.default
+    const key = (type ?? inputs.businessType) as keyof typeof businessDefaults
+    return businessDefaults[key] || businessDefaults.default
   }
 
-  useEffect(() => {
-    const defaults = getBusinessDefaults()
-    setInputs((prev) => ({ ...prev, averageOrderValue: defaults.avgOrder }))
-  }, [inputs.businessType])
+  // averageOrderValue will be set when the user changes Business Type via the Select onValueChange handler
 
-  const businessConfig = getBusinessDefaults()
+  const businessConfig = getBusinessDefaults(inputs.businessType)
   const improvements = {
     conversion: businessConfig.conversion,
     response: businessConfig.response,
@@ -122,7 +120,10 @@ export function ROICalculatorSection() {
                   <label className="block text-sm font-medium text-gray-300 mb-3">Business Type</label>
                   <Select
                     value={inputs.businessType}
-                    onValueChange={(value) => setInputs((prev) => ({ ...prev, businessType: value }))}
+                    onValueChange={(value) => {
+                      const defaults = getBusinessDefaults(value)
+                      setInputs((prev) => ({ ...prev, businessType: value, averageOrderValue: defaults.avgOrder }))
+                    }}
                   >
                     <SelectTrigger className="bg-gray-700/50 border-gray-600 text-white">
                       <SelectValue />
