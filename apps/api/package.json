@@ -2,7 +2,7 @@
   "name": "api",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "lpn",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -20,9 +20,21 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^11.0.1",
+    "@nestjs/common": "^11.1.9",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/mongoose": "^11.0.4",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/throttler": "^6.5.0",
+    "bcrypt": "^6.0.0",
+    "class-validator": "^0.14.3",
+    "mongoose": "^9.0.2",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.11",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

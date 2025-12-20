@@ -1,13 +1,42 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { IntakeModule } from './intake/intake.module';
-import { RoutingModule } from './routing/routing.module';
-import { MedivoiceModule } from './medivoice/medivoice.module';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
+import { AuthLoggingMiddleware } from './auth/auth.middleware';
+import { MonitoringService } from './auth/monitoring.service';
 
 @Module({
-  imports: [IntakeModule, RoutingModule, MedivoiceModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }),
+      inject: [ConfigService],
+    }),
+    ScheduleModule.forRoot(),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 100,
+    }]),
+    AuthModule,
+    MailModule,
+  ],
+  providers: [MonitoringService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthLoggingMiddleware)
+      .forRoutes('auth');
+  }
+}
