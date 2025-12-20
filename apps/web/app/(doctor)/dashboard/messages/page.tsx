@@ -209,14 +209,7 @@ export default function MessagesDashboard() {
                           className="flex items-center justify-between rounded-2xl px-3 py-2 text-sm hover:bg-muted"
                         >
                           {subItem.title}
-                          {subItem.badge && (
-                            <Badge
-                              variant="outline"
-                              className="ml-auto rounded-full px-2 py-0.5 text-xs"
-                            >
-                              {subItem.badge}
-                            </Badge>
-                          )}
+                      
                         </a>
                       ))}
                     </div>
@@ -270,14 +263,7 @@ export default function MessagesDashboard() {
                       {item.icon}
                       <span>{item.title}</span>
                     </div>
-                    {item.badge && (
-                      <Badge
-                        variant="outline"
-                        className="ml-auto rounded-full px-2 py-0.5 text-xs"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
+                    
                     {item.items && (
                       <ChevronDown
                         className={cn(
@@ -296,15 +282,7 @@ export default function MessagesDashboard() {
                           href={subItem.url}
                           className="flex items-center justify-between rounded-2xl px-3 py-2 text-sm hover:bg-muted"
                         >
-                          {subItem.title}
-                          {subItem.badge && (
-                            <Badge
-                              variant="outline"
-                              className="ml-auto rounded-full px-2 py-0.5 text-xs"
-                            >
-                              {subItem.badge}
-                            </Badge>
-                          )}
+                          
                         </a>
                       ))}
                     </div>
@@ -417,55 +395,6 @@ export default function MessagesDashboard() {
                 </Button>
               </div>
             </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <TabsContent value="home" className="space-y-8 mt-0">
-                  <section className="space-y-4">
-                    <div>
-                      {apps
-                        .filter((app) => app.recent)
-                        .map((app) => (
-                          <motion.div
-                            key={app.name}
-                            whileHover={{ scale: 1.02, y: -5 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            <Card className="overflow-hidden cursor-pointer m-4 rounded-3xl border-2 w-full hover:border-primary/50 transition-all duration-300">
-                              <CardContent>
-                                <CardTitle className="text-lg">
-                                  {app.name}
-                                </CardTitle>
-                                <CardDescription>
-                                  <div className="flex items-center justify-between">
-                                    {app.description}
-                                    <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      className="h-8 w-8 rounded-2xl"
-                                    >
-                                      <Star className="h-4 w-4" />
-                                    </Button>
-                                  </div>
-                                </CardDescription>
-                              </CardContent>
-                    
-                            </Card>
-                          </motion.div>
-                        ))}
-                    </div>
-                  </section>
-
-                </TabsContent>
-
-              </motion.div>
-            </AnimatePresence>
           </Tabs>
         </main>
       </div>
