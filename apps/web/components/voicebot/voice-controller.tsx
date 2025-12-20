@@ -1,141 +1,159 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import type { VoiceState, VoiceSettings } from "@/lib/types"
-import { useVoiceSession } from "@/hooks/use-voice-session"
-import { useAudioStream } from "@/hooks/use-audio-stream"
-import { useConversation } from "@/hooks/use-conversation"
-import { useSpeechOutput } from "@/hooks/use-speech-output"
-import { VoiceButton } from "./voice-button"
-import { ConversationLog } from "./conversation-log"
-import { Volume2, VolumeX, RotateCcw, History } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-
-const SILENCE_THRESHOLD_MS = 1500
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import type { VoiceState, VoiceSettings } from "@/lib/types";
+import { useVoiceSession } from "@/hooks/use-voice-session";
+import { useAudioStream } from "@/hooks/use-audio-stream";
+import { useConversation } from "@/hooks/use-conversation";
+import { useSpeechOutput } from "@/hooks/use-speech-output";
+import { VoiceButton } from "./voice-button";
+import { ConversationLog } from "./conversation-log";
+import { Volume2, VolumeX, RotateCcw, History } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function VoiceController() {
-  const [voiceState, setVoiceState] = useState<VoiceState>("idle")
-  const [isMuted, setIsMuted] = useState(false)
-  const [isLogOpen, setIsLogOpen] = useState(false)
-  const [hasStarted, setHasStarted] = useState(false)
-  const [currentTranscript, setCurrentTranscript] = useState("")
-  const [lastResponse, setLastResponse] = useState("")
+  const [isMuted, setIsMuted] = useState(false);
+  const [isLogOpen, setIsLogOpen] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [currentTranscript, setCurrentTranscript] = useState("");
+  const [lastResponse, setLastResponse] = useState("");
   const [voiceSettings, setVoiceSettings] = useState<VoiceSettings>({
     voice: "neutral",
     rate: 1,
     pitch: 1,
     volume: 1,
-  })
+  });
 
-  // API-driven hooks - thin wrappers around backend calls
-  const { sessionId, startSession, endSession } = useVoiceSession()
-  const { audioLevel, startRecording, stopRecording } = useAudioStream()
-  const { messages, isThinking, sendMessage } = useConversation()
-  const { isSpeaking, speak, stop: stopSpeaking } = useSpeechOutput()
+  // Backend-driven hooks
+  const { sessionId, startSession, endSession } = useVoiceSession();
+  const { audioLevel, startRecording, stopRecording } = useAudioStream();
+  const { messages, isThinking, sendMessage } = useConversation();
+  const { isSpeaking, speak, stop: stopSpeaking } = useSpeechOutput();
 
-  const lastAudioActivityRef = useRef<number>(Date.now())
-  const silenceTimeoutRef = useRef<NodeJS.Timeout>()
+  // Refs
+  const lastAudioActivityRef = useRef<number>(0);
 
-  // Update voice state based on backend responses
   useEffect(() => {
-    if (isThinking) {
-      setVoiceState("thinking")
-    } else if (isSpeaking) {
-      setVoiceState("speaking")
-    } else if (currentTranscript) {
-      setVoiceState("listening")
-    } else {
-      setVoiceState("idle")
-    }
-  }, [isThinking, isSpeaking, currentTranscript])
+    lastAudioActivityRef.current = Date.now();
+  }, []);
 
-  // Auto-restart listening after AI speaks (continuous conversation)
+  /**
+   * ✅ DERIVED STATE (no useEffect, no setState)
+   */
+  const voiceState: VoiceState = useMemo(() => {
+    if (isThinking) return "thinking";
+    if (isSpeaking) return "speaking";
+    if (currentTranscript) return "listening";
+    return "idle";
+  }, [isThinking, isSpeaking, currentTranscript]);
+
+  /**
+   * Send user message → LLM → TTS
+   */
+  const handleUserMessage = useCallback(
+    async (text: string) => {
+      if (!sessionId || !text.trim()) return;
+
+      setCurrentTranscript("");
+
+      try {
+        const response = await sendMessage(sessionId, text);
+        setLastResponse(response);
+
+        if (!isMuted) {
+          await speak(sessionId, response, voiceSettings);
+        }
+      } catch (error) {
+        console.error("Error processing message:", error);
+      }
+    },
+    [sessionId, sendMessage, speak, voiceSettings, isMuted]
+  );
+
+  /**
+   * Handle transcript streaming from backend
+   */
+  const handleTranscript = useCallback(
+    (transcript: string, isFinal: boolean) => {
+      setCurrentTranscript(transcript);
+
+      if (isFinal && transcript.trim()) {
+        stopRecording();
+        handleUserMessage(transcript);
+      }
+    },
+    [stopRecording, handleUserMessage]
+  );
+
+  /**
+   * Auto restart listening (continuous conversation)
+   */
   useEffect(() => {
-    if (!hasStarted || !sessionId) return
+    if (!hasStarted || !sessionId) return;
 
     if (!isSpeaking && !currentTranscript && voiceState === "idle") {
       const timeout = setTimeout(() => {
-        startRecording(sessionId, handleTranscript)
-      }, 500)
-      return () => clearTimeout(timeout)
-    }
-  }, [hasStarted, sessionId, isSpeaking, currentTranscript, voiceState])
+        startRecording(sessionId, handleTranscript);
+      }, 500);
 
-  // Monitor audio levels for silence detection (visual only, backend handles actual detection)
+      return () => clearTimeout(timeout);
+    }
+  }, [
+    hasStarted,
+    sessionId,
+    isSpeaking,
+    currentTranscript,
+    voiceState,
+    startRecording,
+    handleTranscript,
+  ]);
+
+  /**
+   * Audio activity tracking (visual only)
+   */
   useEffect(() => {
     if (audioLevel > 0.15) {
-      lastAudioActivityRef.current = Date.now()
-      if (silenceTimeoutRef.current) {
-        clearTimeout(silenceTimeoutRef.current)
-      }
+      lastAudioActivityRef.current = Date.now();
     }
-  }, [audioLevel])
-
-  // Handle transcript updates from backend
-  const handleTranscript = (transcript: string, isFinal: boolean) => {
-    setCurrentTranscript(transcript)
-
-    // Backend signals final transcript - stop recording and send message
-    if (isFinal && transcript.trim()) {
-      stopRecording()
-      handleUserMessage(transcript)
-    }
-  }
-
-  // Send user message to backend and get AI response
-  const handleUserMessage = async (text: string) => {
-    if (!sessionId || !text.trim()) return
-
-    setCurrentTranscript("")
-
-    try {
-      // Backend processes message with LLM
-      const response = await sendMessage(sessionId, text)
-      setLastResponse(response)
-
-      // Backend handles TTS
-      if (!isMuted && sessionId) {
-        await speak(sessionId, response, voiceSettings)
-      }
-    } catch (error) {
-      console.error("Error processing message:", error)
-    }
-  }
+  }, [audioLevel]);
 
   const handleVoiceButtonClick = async () => {
     if (!hasStarted) {
-      // Initialize session with backend
-      setHasStarted(true)
-      const newSessionId = await startSession()
+      setHasStarted(true);
+      const newSessionId = await startSession();
       if (newSessionId) {
-        startRecording(newSessionId, handleTranscript)
+        startRecording(newSessionId, handleTranscript);
       }
     } else if (voiceState === "speaking") {
-      // Stop current speech
-      stopSpeaking()
+      stopSpeaking();
     }
-  }
+  };
 
   const handleReplay = async () => {
     if (lastResponse && !isSpeaking && sessionId) {
-      await speak(sessionId, lastResponse, voiceSettings)
+      await speak(sessionId, lastResponse, voiceSettings);
     }
-  }
+  };
 
   const handleVoiceChange = (voice: VoiceSettings["voice"]) => {
-    setVoiceSettings((prev) => ({ ...prev, voice }))
-  }
+    setVoiceSettings((prev) => ({ ...prev, voice }));
+  };
 
-  // Cleanup on unmount
+  /**
+   * Cleanup
+   */
   useEffect(() => {
     return () => {
-      stopRecording()
-      if (sessionId) {
-        endSession()
-      }
-    }
-  }, [])
+      stopRecording();
+      if (sessionId) endSession();
+    };
+  }, [stopRecording, endSession, sessionId]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 gap-12">
@@ -167,7 +185,11 @@ export function VoiceController() {
             className="rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50"
             aria-label={isMuted ? "Unmute voice" : "Mute voice"}
           >
-            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            {isMuted ? (
+              <VolumeX className="w-5 h-5" />
+            ) : (
+              <Volume2 className="w-5 h-5" />
+            )}
           </Button>
 
           <Button
@@ -192,15 +214,25 @@ export function VoiceController() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => handleVoiceChange("neutral")}>Neutral</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleVoiceChange("male")}>Male</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleVoiceChange("female")}>Female</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleVoiceChange("neutral")}>
+                Neutral
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleVoiceChange("male")}>
+                Male
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleVoiceChange("female")}>
+                Female
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       )}
 
-      <ConversationLog messages={messages} isOpen={isLogOpen} onClose={() => setIsLogOpen(false)} />
+      <ConversationLog
+        messages={messages}
+        isOpen={isLogOpen}
+        onClose={() => setIsLogOpen(false)}
+      />
     </div>
-  )
+  );
 }
