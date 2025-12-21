@@ -149,7 +149,7 @@ const AnimatedCalendarDemo = ({ isActive }: { isActive: boolean }) => {
         ))}
       </div>
       {booked && (
-        <div className="mt-2 text-xs text-green-600 font-medium animate-fade-in">✓ Appointment booked for the 15th</div>
+        <div className="mt-2 text-xs text-green-600 font-medium animate-fade-in">✓ Đặt lịch thành công</div>
       )}
     </div>
   )
@@ -203,69 +203,12 @@ const AnimatedEmailDemo = ({ isActive }: { isActive: boolean }) => {
   )
 }
 
-const AnimatedLeadsDemo = ({ isActive }: { isActive: boolean }) => {
-  const [leads, setLeads] = useState([
-    { name: "Sarah M.", score: 0, qualified: false },
-    { name: "John D.", score: 0, qualified: false },
-    { name: "Mike R.", score: 0, qualified: false },
-  ])
-
-  useEffect(() => {
-    if (!isActive) return
-
-    leads.forEach((_, index) => {
-      setTimeout(() => {
-        const targetScore = [85, 92, 78][index]
-        const interval = setInterval(() => {
-          setLeads((prev) =>
-            prev.map((lead, i) => {
-              if (i === index && lead.score < targetScore) {
-                const newScore = Math.min(lead.score + 5, targetScore)
-                return {
-                  ...lead,
-                  score: newScore,
-                  qualified: newScore >= 80,
-                }
-              }
-              return lead
-            }),
-          )
-        }, 50)
-
-        setTimeout(() => clearInterval(interval), 1000)
-      }, index * 600)
-    })
-  }, [isActive])
-
-  return (
-    <div className="bg-slate-50 rounded-lg p-4 h-32 overflow-hidden">
-      <div className="space-y-2">
-        {leads.map((lead, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <span className="text-xs text-slate-700 w-12">{lead.name}</span>
-            <div className="flex-1 bg-slate-200 rounded-full h-2">
-              <div
-                className={`h-2 rounded-full transition-all duration-500 ${
-                  lead.qualified ? "bg-green-500" : "bg-blue-500"
-                }`}
-                style={{ width: `${lead.score}%` }}
-              />
-            </div>
-            <span className="text-xs font-medium w-8">{lead.score}%</span>
-            {lead.qualified && <span className="text-xs text-green-600">✓</span>}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 const AnimatedIntegrationsDemo = ({ isActive }: { isActive: boolean }) => {
   const [connections, setConnections] = useState([
-    { name: "CRM", connected: false },
-    { name: "WhatsApp", connected: false },
-    { name: "Calendar", connected: false },
-    { name: "Email", connected: false },
+    { name: "Khoa tai mũi họng", connected: false },
+    { name: "Khoa nội tiết", connected: false },
+    { name: "Khoa nhi", connected: false },
+    { name: "...", connected: false },
   ])
 
   useEffect(() => {
@@ -301,7 +244,7 @@ const AnimatedIntegrationsDemo = ({ isActive }: { isActive: boolean }) => {
         ))}
       </div>
       <div className="mt-2 text-center">
-        <div className="text-xs text-slate-500">{connections.filter((c) => c.connected).length}/4 connected</div>
+        <div className="text-xs text-slate-500">Đang tạo ERM</div>
       </div>
     </div>
   )
@@ -316,16 +259,16 @@ const features = [
     size: "large",
   },
   {
-    title: "Multi-Platform Integration",
+    title: "Tạo ERM từ hội thoại",
     description:
-      "Connect with your existing tools including CRM, calendar, WhatsApp, SMS, and more for a unified customer experience.",
+      "Tiết kiệm thời gian ghi chép bằng cách tự động tạo hồ sơ bệnh án điện tử từ các cuộc trò chuyện với bệnh nhân.",
     demo: AnimatedIntegrationsDemo,
     size: "medium",
   },
   {
-    title: "Smart Appointment Booking",
+    title: "Đặt lịch khám bệnh thông minh",
     description:
-      "Automated scheduling system that checks availability, books appointments, and sends confirmations without human intervention.",
+      "Hệ thống đặt lịch tự động kiểm tra thời gian rảnh, đặt lịch hẹn và gửi xác nhận mà không cần can thiệp của con người.",
     demo: AnimatedCalendarDemo,
     size: "medium",
   },
@@ -403,16 +346,10 @@ export function FeaturesSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-sm font-medium mb-6">
-              <svg className="w-4 h-4 mr-2 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V7H1V9H3V15H1V17H3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V17H23V15H21V9H23ZM19 9V15H5V9H19ZM7.5 11.5C7.5 10.67 8.17 10 9 10S10.5 10.67 10.5 11.5 9.83 13 9 13 7.5 12.33 7.5 11.5ZM13.5 11.5C13.5 10.67 14.17 10 15 10S16.5 10.67 16.5 11.5 15.83 13 15 13 13.5 12.33 13.5 11.5ZM12 16C13.11 16 14.08 16.59 14.71 17.5H9.29C9.92 16.59 10.89 16 12 16Z" />
-              </svg>
-              AI Working 24/7 - Never Miss a Lead
-            </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 text-balance mb-4 sm:mb-6">
-              Your AI Team{" "}
-              <span className="bg-gradient-to-r from-slate-600 to-slate-400 bg-clip-text text-transparent">
-                Never Sleeps
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-teal-800 text-balance mb-4 sm:mb-6">
+              Nâng cao{" "}
+              <span className="bg-gradient-to-r from-teal-800 to-slate-400 bg-clip-text text-transparent">
+                trải nghiệm khám chữa
               </span>
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-3xl mx-auto font-light leading-relaxed">

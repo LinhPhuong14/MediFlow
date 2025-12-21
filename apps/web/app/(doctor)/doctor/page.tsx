@@ -12,18 +12,18 @@ import { AuroraBackground } from "@/components/ui/aurora-background";
 export default function HomePage() {
   return (
     <AuroraBackground>
-      <div className="min-h-screen overflow-hidden">
+      <div className="w-full min-h-screen overflow-hidden">
         <main className="min-h-screen relative overflow-hidden">
           
-          <div className="relative z-10">
+          <div className="relative z-10 w-full">
             <GlassmorphismNav />
             <HeroSection />
             <ProblemSolutionSection />
             <FeaturesSection />
             {/* <AITeamSection /> */}
             <TestimonialsSection />
-            <ROICalculatorSection />
-            {/* <CTASection /> */}
+            {/* <ROICalculatorSection /> */}
+            <CTASection />
             <Footer />
           </div>
         </main>

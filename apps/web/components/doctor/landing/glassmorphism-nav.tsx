@@ -6,8 +6,8 @@ import Image from "next/image"
 import Link from "next/link"
 
 const navigation = [
+  { name: "Giải pháp MediFlow", href: "#problem" },
   { name: "Tính năng", href: "#features" },
-  { name: "Barbers & Salons", href: "#ai-team" },
   { name: "Restaurants", href: "#testimonials" },
   { name: "Liên hệ", href: "#footer" },
 ]

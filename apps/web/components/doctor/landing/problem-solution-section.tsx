@@ -65,7 +65,7 @@ export function ProblemSolutionSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-24 px-4 relative z-10">
+    <section ref={sectionRef} id="problem" className="py-16 sm:py-24 px-4 relative z-10">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div
@@ -93,7 +93,7 @@ export function ProblemSolutionSection() {
         >
           {/* Problem Card */}
           <div className="group">
-            <div className="bg-white/5 backdrop-blur-md border border-white/40 border-2 rounded-2xl p-6 sm:p-8 h-full hover:bg-white/30 transition-all duration-500 hover:border-white/90">
+            <div className="bg-red-800/30 backdrop-blur-md border border-white/40 border-2 rounded-2xl p-6 sm:p-8 h-full transition-all duration-500 hover:border-white/90">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 rounded-lg bg-white/20">
                   <AlertTriangle />
@@ -102,10 +102,10 @@ export function ProblemSolutionSection() {
               </div>
 
               {/* Key Stat */}
-              <div className="bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-xl p-4 sm:p-6 mb-6">
-                <div className="text-3xl sm:text-4xl font-bold text-red-400 mb-2">4+ Hours</div>
+              <div className="bg-red-500/30 backdrop-blur-sm border border-red-500/20 rounded-xl p-4 sm:p-6 mb-6">
+                <div className="text-3xl sm:text-4xl font-bold text-red-700 mb-2">4000 Lượt khám/ngày</div>
                 <p className="text-white/80 text-sm sm:text-base">
-                  Average response time, but 78% of customers choose the first business to respond
+                  Nhưng 40% thời gian của bác sĩ để nhập hiệu hồ sơ
                 </p>
               </div>
 
@@ -113,20 +113,17 @@ export function ProblemSolutionSection() {
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-white/70 text-sm sm:text-base">
-                    Staff miss inquiries during off-hours and weekends
+                  <p className="text-white/80 text-sm sm:text-base">
+                    Mất hàng trăm triệu USD vì rào cản ngôn ngữ
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-white/70 text-sm sm:text-base">
-                    Busy serving customers while online leads go cold
+                  <p className="text-white/80 text-sm sm:text-base">
+                    Giảm hiệu suất vì nhiều công việc hành chính
                   </p>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-white/70 text-sm sm:text-base">Marketing spend wasted on unresponded inquiries</p>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -138,14 +135,14 @@ export function ProblemSolutionSection() {
                 <div className="p-2 rounded-lg bg-green-500/20">
                   <CheckCircle />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-green-400">Our Solution</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-green-700">Giải pháp MediFlow</h3>
               </div>
 
               {/* Key Stat */}
               <div className="bg-green-500/10 backdrop-blur-sm border border-green-500/20 rounded-xl p-4 sm:p-6 mb-6">
-                <div className="text-3xl sm:text-4xl font-bold text-green-400 mb-2">24/7</div>
-                <p className="text-white/80 text-sm sm:text-base">
-                  AI assistant responds within seconds, books appointments while you sleep
+                <div className="text-3xl sm:text-4xl font-bold text-green-400 mb-2">AI Agents</div>
+                <p className="text-teal-800/80 text-sm sm:text-base">
+                  Hệ thống AI hỗ trợ quy trình toàn diện
                 </p>
               </div>
 
@@ -153,15 +150,15 @@ export function ProblemSolutionSection() {
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle />
-                  <p className="text-white/70 text-sm sm:text-base">Instantly qualifies leads and books appointments</p>
+                  <p className="text-teal-800/70 text-sm sm:text-base">Instantly qualifies leads and books appointments</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle />
-                  <p className="text-white/70 text-sm sm:text-base">Integrates with your CRM and calendar system</p>
+                  <p className="text-teal-800/70 text-sm sm:text-base">Integrates with your CRM and calendar system</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle />
-                  <p className="text-white/70 text-sm sm:text-base">Works across website, WhatsApp, email, and phone</p>
+                  <p className="text-teal-800/70 text-sm sm:text-base">Works across website, WhatsApp, email, and phone</p>
                 </div>
               </div>
             </div>
@@ -170,41 +167,41 @@ export function ProblemSolutionSection() {
 
         {/* Stats Row */}
         <div
-          className={`grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16 transition-all duration-1000 delay-600 ${
+          className={`grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-16 transition-all duration-1000 delay-600 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <div className="text-center bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-300">
-            <div className="text-2xl sm:text-3xl font-bold text-white mb-2">€500+</div>
-            <p className="text-white/70 text-xs sm:text-sm">Average value per lost lead</p>
+          <div className="text-center bg-teal-500/10 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-6 transition-all duration-300">
+            <div className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2">30-50%</div>
+            <p className="text-teal-800/70 text-xs sm:text-sm">Thời gian ghi chép giảm</p>
           </div>
-          <div className="text-center bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-300">
-            <div className="text-2xl sm:text-3xl font-bold text-white mb-2">78%</div>
-            <p className="text-white/70 text-xs sm:text-sm">Choose first responder</p>
+          <div className="text-center bg-teal-500/10 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-6 transition-all duration-300">
+            <div className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2">20-30%</div>
+            <p className="text-teal-800/70 text-xs sm:text-sm">Lượt khám/ngày tăng</p>
           </div>
-          <div className="text-center bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-300">
-            <div className="text-2xl sm:text-3xl font-bold text-white mb-2">24/7</div>
-            <p className="text-white/70 text-xs sm:text-sm">Our AI never sleeps</p>
+          <div className="text-center bg-teal-500/10 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-6 transition-all duration-300">
+            <div className="text-2xl sm:text-3xl font-bold text-teal-800 mb-2">3.5~4h</div>
+            <p className="text-teal-800/70 text-xs sm:text-sm">Thời gian làm việc của y tá được giải phóng</p>
           </div>
         </div>
 
         {/* CTA Section */}
         <div
-          className={`text-center bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 transition-all duration-1000 delay-900 ${
+          className={`text-center bg-teal-700/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 transition-all duration-1000 delay-900 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 sm:mb-4 text-balance">
-            Stop Losing Customers Today
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-teal-800 mb-3 sm:mb-4 text-balance">
+            Tái thiết dòng chảy y tế cùng MediFlow
           </h3>
-          <p className="text-sm sm:text-base md:text-lg text-white/70 mb-6 sm:mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            Get a free response time audit and see exactly how many leads you're missing right now.
+          <p className="text-sm sm:text-base md:text-lg text-teal-800/70 mb-6 sm:mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+           Không chỉ là trợ lý AI đồng hành, chúng tôi là giải pháp chuyển đổi số linh hoạt.
           </p>
           <Button
             size="lg"
             className="bg-white text-black rounded-full px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium transition-all duration-300 hover:bg-gray-50 hover:scale-105 hover:shadow-lg group cursor-pointer"
           >
-            Get Free Response Audit
+            Nhận tư vấn
             <ArrowRight />
           </Button>
         </div>
