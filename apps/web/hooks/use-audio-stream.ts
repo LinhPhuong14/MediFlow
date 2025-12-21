@@ -1,109 +1,91 @@
-"use client"
+"use client";
 
-import { useState, useRef, useCallback } from "react"
-import { apiClient } from "@/lib/api-client"
+import { useState, useRef, useCallback } from "react";
 
-/**
- * Hook for capturing and streaming audio to backend
- *
- * Responsibilities:
- * - Capture microphone audio
- * - Calculate audio levels for UI visualization
- * - Send audio chunks to backend
- *
- * Does NOT:
- * - Transcribe speech (handled by backend)
- * - Detect silence (handled by backend)
- * - Process audio data
- */
 export function useAudioStream() {
-  const [isRecording, setIsRecording] = useState(false)
-  const [audioLevel, setAudioLevel] = useState(0)
-  const [error, setError] = useState<string | null>(null)
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-  const audioContextRef = useRef<AudioContext | null>(null)
-  const analyserRef = useRef<AnalyserNode | null>(null)
-  const animationFrameRef = useRef<number | null>(null)
-  const streamRef = useRef<MediaStream | null>(null)
-
-  // Calculate audio levels for visualization only
-  const analyzeAudio = useCallback(() => {
-    if (!analyserRef.current) return
-
-    const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount)
-    analyserRef.current.getByteFrequencyData(dataArray)
-
-    const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length
-    setAudioLevel(average / 255)
-
-    animationFrameRef.current = requestAnimationFrame(analyzeAudio)
-  }, [])
+  const chunksRef = useRef<Blob[]>([]);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   const startRecording = useCallback(
-    async (sessionId: string, onTranscript?: (transcript: string, isFinal: boolean) => void) => {
-      setError(null)
+    async (
+      sessionId: string,
+      onTranscript?: (text: string, isFinal: boolean) => void
+    ) => {
+      setError(null);
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-        streamRef.current = stream
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        streamRef.current = stream;
 
-        // Setup audio analysis for visualization
-        audioContextRef.current = new AudioContext()
-        const source = audioContextRef.current.createMediaStreamSource(stream)
-        analyserRef.current = audioContextRef.current.createAnalyser()
-        analyserRef.current.fftSize = 256
-        source.connect(analyserRef.current)
+        const mimeType = MediaRecorder.isTypeSupported("audio/webm")
+          ? "audio/webm"
+          : "audio/mp4";
 
-        analyzeAudio()
+        const mediaRecorder = new MediaRecorder(stream, { mimeType });
+        mediaRecorderRef.current = mediaRecorder;
+        chunksRef.current = [];
 
-        // Setup media recorder to capture audio chunks
-        mediaRecorderRef.current = new MediaRecorder(stream)
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) chunksRef.current.push(e.data);
+        };
 
-        mediaRecorderRef.current.ondataavailable = async (event) => {
-          if (event.data.size > 0 && sessionId) {
-            // Send audio chunk to backend for transcription
-            try {
-              const result = await apiClient.transcribeAudio(sessionId, event.data)
-              onTranscript?.(result.transcript, result.isFinal)
-            } catch (err) {
-              console.error("Transcription error:", err)
+        const interval = setInterval(() => {
+          setAudioLevel(Math.random() * 0.3);
+        }, 200);
+
+        mediaRecorder.onstop = async () => {
+          clearInterval(interval);
+          setAudioLevel(0);
+
+          const audioBlob = new Blob(chunksRef.current, { type: mimeType });
+
+          const formData = new FormData();
+          formData.append("audio", audioBlob, "speech");
+
+          try {
+            const res = await fetch("/api/stt", {
+              method: "POST",
+              body: formData,
+            });
+
+            const json = await res.json();
+
+            const text =
+              json?.result || json?.hypotheses?.[0]?.transcript || "";
+
+            if (text && onTranscript) {
+              onTranscript(text, true);
             }
+          } catch (err) {
+            console.error("STT error:", err);
           }
-        }
+        };
 
-        // Send chunks every 500ms
-        mediaRecorderRef.current.start(500)
-        setIsRecording(true)
+        mediaRecorder.start();
+        setIsRecording(true);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to start recording"
-        setError(message)
-        throw err
+        setError(
+          err instanceof Error ? err.message : "Failed to start recording"
+        );
       }
     },
-    [analyzeAudio],
-  )
+    []
+  );
 
   const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop()
-    }
+    mediaRecorderRef.current?.stop();
+    streamRef.current?.getTracks().forEach((t) => t.stop());
 
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop())
-    }
-
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current)
-    }
-
-    if (audioContextRef.current) {
-      audioContextRef.current.close()
-    }
-
-    setIsRecording(false)
-    setAudioLevel(0)
-  }, [isRecording])
+    setIsRecording(false);
+    setAudioLevel(0);
+  }, []);
 
   return {
     isRecording,
@@ -111,5 +93,5 @@ export function useAudioStream() {
     error,
     startRecording,
     stopRecording,
-  }
+  };
 }
