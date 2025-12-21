@@ -32,7 +32,7 @@ export default function ThemeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-    ABC
+  
     </Button>
   )
 }

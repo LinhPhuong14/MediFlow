@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Send, Phone, Mail, MapPin } from "lucide-react"
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Send, Phone, Mail, MapPin } from "lucide-react";
 
 export function ContactSection() {
   return (
@@ -38,33 +44,54 @@ export function ContactSection() {
               </p>
 
               <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
-                <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-4">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="flex items-center space-x-4"
+                >
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full flex items-center justify-center">
                     <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-teal-800" />
                   </div>
                   <div>
-                    <div className="font-semibold font-montserrat text-sm sm:text-base">Hotline</div>
-                    <div className="text-teal-800/80 font-montserrat text-sm sm:text-base">1900 1234</div>
+                    <div className="font-semibold font-montserrat text-sm sm:text-base">
+                      Hotline
+                    </div>
+                    <div className="text-teal-800/80 font-montserrat text-sm sm:text-base">
+                      1900 1234
+                    </div>
                   </div>
                 </motion.div>
 
-                <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-4">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="flex items-center space-x-4"
+                >
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full flex items-center justify-center">
                     <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-teal-800" />
                   </div>
                   <div>
-                    <div className="font-semibold font-montserrat text-sm sm:text-base">Email</div>
-                    <div className="text-teal-800/80 font-montserrat text-sm sm:text-base">support@mediflow.com</div>
+                    <div className="font-semibold font-montserrat text-sm sm:text-base">
+                      Email
+                    </div>
+                    <div className="text-teal-800/80 font-montserrat text-sm sm:text-base">
+                      support@mediflow.com
+                    </div>
                   </div>
                 </motion.div>
 
-                <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-4">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="flex items-center space-x-4"
+                >
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full flex items-center justify-center">
                     <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-teal-800" />
                   </div>
                   <div>
-                    <div className="font-semibold font-montserrat text-sm sm:text-base">Địa chỉ</div>
-                    <div className="text-teal-800/80 font-montserrat text-sm sm:text-base">Hà Nội, Việt Nam</div>
+                    <div className="font-semibold font-montserrat text-sm sm:text-base">
+                      Địa chỉ
+                    </div>
+                    <div className="text-teal-800/80 font-montserrat text-sm sm:text-base">
+                      Hà Nội, Việt Nam
+                    </div>
                   </div>
                 </motion.div>
               </div>
@@ -115,15 +142,6 @@ export function ContactSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">
-                      Năm sinh (*)
-                    </label>
-                    <Input
-                      placeholder="Nhập năm sinh của bạn"
-                      className="w-full font-montserrat dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">
                       Email (*)
                     </label>
                     <Input
@@ -132,42 +150,28 @@ export function ContactSection() {
                       className="w-full font-montserrat dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">
-                    Bạn là
-                  </label>
-                  <Select>
-                    <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                      <SelectValue placeholder="Lựa chọn" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="student">Học sinh/Sinh viên</SelectItem>
-                      <SelectItem value="worker">Người đi làm</SelectItem>
-                      <SelectItem value="teacher">Giáo viên</SelectItem>
-                      <SelectItem value="other">Khác</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">
+                      Quy mô phòng khám của bạn (*)
+                    </label>
+                    <Select>
+                      <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                        <SelectValue placeholder="Lựa chọn" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ielts">1-5 Phòng khám</SelectItem>
+                        <SelectItem value="toeic">Bệnh viện tỉnh</SelectItem>
+                        <SelectItem value="business">
+                          Bệnh viện trung ương
+                        </SelectItem>
+                        <SelectItem value="conversation">
+                          Chuỗi bệnh viện
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">
-                    Khóa học bạn quan tâm (*)
-                  </label>
-                  <Select>
-                    <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
-                      <SelectValue placeholder="Lựa chọn" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ielts">IELTS</SelectItem>
-                      <SelectItem value="toeic">TOEIC</SelectItem>
-                      <SelectItem value="business">Business English</SelectItem>
-                      <SelectItem value="conversation">Giao tiếp cơ bản</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-montserrat">
                     Nội dung
@@ -181,23 +185,28 @@ export function ContactSection() {
 
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-montserrat">
                   Bằng việc gửi đăng ký nhận tư vấn, bạn đã đồng ý với{" "}
-                  <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">
-                    Chính sách bảo mật thông tin của GIPHE
+                  <a
+                    href="#"
+                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    Chính sách bảo mật thông tin của MediFlow
                   </a>
                 </p>
 
                 <Button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-teal-800 py-3 text-base sm:text-lg font-montserrat group"
-                >
-                  Gửi câu hỏi
-                  <Send className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                type="submit"
+                className="shadow-3xl w-full mx-auto border-2 border-white bg-gradient-to-r rounded-full from-blue-600/80 to-green-600/10  hover:from-blue-300 hover:to-green-400 text-white px-8 py-4 text-lg group"
+              >
+                <a href="/patient/register" className="flex items-center">
+                  Gửi thông tin
+                  <Send className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </Button>
               </form>
             </div>
           </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }
