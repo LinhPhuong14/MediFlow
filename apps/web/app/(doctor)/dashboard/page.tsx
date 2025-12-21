@@ -70,6 +70,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { url } from "inspector";
 
 // Sample data for apps
 const apps = [
@@ -183,158 +184,6 @@ const apps = [
   },
 ];
 
-// Sample data for recent files
-const recentFiles = [
-  {
-    name: "Brand Redesign.pxm",
-    app: "PixelMaster",
-    modified: "2 hours ago",
-    icon: <ImageIcon className="text-violet-500" />,
-    shared: true,
-    size: "24.5 MB",
-    collaborators: 3,
-  },
-  {
-    name: "Company Logo.vec",
-    app: "VectorPro",
-    modified: "Yesterday",
-    icon: <Brush className="text-orange-500" />,
-    shared: true,
-    size: "8.2 MB",
-    collaborators: 2,
-  },
-  {
-    name: "Product Launch Video.vid",
-    app: "VideoStudio",
-    modified: "3 days ago",
-    icon: <Video className="text-pink-500" />,
-    shared: false,
-    size: "1.2 GB",
-    collaborators: 0,
-  },
-  {
-    name: "UI Animation.mfx",
-    app: "MotionFX",
-    modified: "Last week",
-    icon: <Sparkles className="text-blue-500" />,
-    shared: true,
-    size: "345 MB",
-    collaborators: 4,
-  },
-  {
-    name: "Magazine Layout.pgc",
-    app: "PageCraft",
-    modified: "2 weeks ago",
-    icon: <Layers className="text-red-500" />,
-    shared: false,
-    size: "42.8 MB",
-    collaborators: 0,
-  },
-  {
-    name: "Mobile App Design.uxf",
-    app: "UXFlow",
-    modified: "3 weeks ago",
-    icon: <LayoutGrid className="text-fuchsia-500" />,
-    shared: true,
-    size: "18.3 MB",
-    collaborators: 5,
-  },
-  {
-    name: "Product Photography.phl",
-    app: "PhotoLab",
-    modified: "Last month",
-    icon: <Camera className="text-teal-500" />,
-    shared: false,
-    size: "156 MB",
-    collaborators: 0,
-  },
-];
-
-// Sample data for projects
-const projects = [
-  {
-    name: "Website Redesign",
-    description: "Complete overhaul of company website",
-    progress: 75,
-    dueDate: "June 15, 2025",
-    members: 4,
-    files: 23,
-  },
-  {
-    name: "Mobile App Launch",
-    description: "Design and assets for new mobile application",
-    progress: 60,
-    dueDate: "July 30, 2025",
-    members: 6,
-    files: 42,
-  },
-  {
-    name: "Brand Identity",
-    description: "New brand guidelines and assets",
-    progress: 90,
-    dueDate: "May 25, 2025",
-    members: 3,
-    files: 18,
-  },
-  {
-    name: "Marketing Campaign",
-    description: "Summer promotion materials",
-    progress: 40,
-    dueDate: "August 10, 2025",
-    members: 5,
-    files: 31,
-  },
-];
-
-// Sample data for tutorials
-const tutorials = [
-  {
-    title: "Mastering Digital Illustration",
-    description: "Learn advanced techniques for creating stunning digital art",
-    duration: "1h 45m",
-    level: "Advanced",
-    instructor: "Sarah Chen",
-    category: "Illustration",
-    views: "24K",
-  },
-  {
-    title: "UI/UX Design Fundamentals",
-    description: "Essential principles for creating intuitive user interfaces",
-    duration: "2h 20m",
-    level: "Intermediate",
-    instructor: "Michael Rodriguez",
-    category: "Design",
-    views: "56K",
-  },
-  {
-    title: "Video Editing Masterclass",
-    description: "Professional techniques for cinematic video editing",
-    duration: "3h 10m",
-    level: "Advanced",
-    instructor: "James Wilson",
-    category: "Video",
-    views: "32K",
-  },
-  {
-    title: "Typography Essentials",
-    description: "Create beautiful and effective typography for any project",
-    duration: "1h 30m",
-    level: "Beginner",
-    instructor: "Emma Thompson",
-    category: "Typography",
-    views: "18K",
-  },
-  {
-    title: "Color Theory for Designers",
-    description: "Understanding color relationships and psychology",
-    duration: "2h 05m",
-    level: "Intermediate",
-    instructor: "David Kim",
-    category: "Design",
-    views: "41K",
-  },
-];
-
 // Sample data for sidebar navigation
 const sidebarItems = [
   {
@@ -345,14 +194,12 @@ const sidebarItems = [
   {
     title: "MediVoice",
     icon: <Layers />,
-    items: [
-      { title: "Báo cáo", url: "#" },
-      { title: "File ghi âm", url: "#" },
-    ],
+    url: "/dashboard/medivoice",
   },
   {
     title: "Tin nhắn",
     icon: <Users />,
+    url: "/dashboard/messages",
   },
 ];
 
@@ -514,38 +361,15 @@ export default function HomeDashboard() {
                       "flex w-full items-center justify-between rounded-2xl px-3 py-2 text-sm font-medium",
                       item.isActive
                         ? "bg-primary/10 text-primary"
-                        : "hover:bg-muted"
+                        : "hover:bg-amber-800/20"
                     )}
-                    onClick={() => item.items && toggleExpanded(item.title)}
+                    onClick={() => window.location.href = item.url || "#"}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon}
                       <span>{item.title}</span>
                     </div>
-
-                    {item.items && (
-                      <ChevronDown
-                        className={cn(
-                          "ml-2 h-4 w-4 transition-transform",
-                          expandedItems[item.title] ? "rotate-180" : ""
-                        )}
-                      />
-                    )}
                   </button>
-
-                  {item.items && expandedItems[item.title] && (
-                    <div className="mt-1 ml-6 space-y-1 border-l pl-3">
-                      {item.items.map((subItem) => (
-                        <a
-                          key={subItem.title}
-                          href={subItem.url}
-                          className="flex items-center justify-between rounded-2xl px-3 py-2 text-sm hover:bg-muted"
-                        >
-                          {subItem.title}
-                        </a>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

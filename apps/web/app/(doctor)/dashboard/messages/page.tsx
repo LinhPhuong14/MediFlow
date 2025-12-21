@@ -59,8 +59,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -70,6 +68,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { url } from "inspector";
+
 
 
 // Sample data for sidebar navigation
@@ -77,23 +77,22 @@ const sidebarItems = [
   {
     title: "Danh sách bệnh nhân",
     icon: <Home />,
-    isActive: true,
+    url: "/dashboard",
   },
   {
     title: "MediVoice",
     icon: <Layers />,
-    items: [
-      { title: "Báo cáo", url: "#"},
-      { title: "File ghi âm", url: "#" },
-    ],
+    url: "/dashboard/medivoice",
   },
   {
     title: "Tin nhắn",
     icon: <Users />,
+    url: "/dashboard/messages",
+    isActive: true,
   },
 ];
 
-export default function MessagesDashboard() {
+export default function MessageDashboard() {
   const [progress, setProgress] = useState(0);
   const [notifications, setNotifications] = useState(5);
   const [activeTab, setActiveTab] = useState("home");
@@ -183,43 +182,20 @@ export default function MessagesDashboard() {
                         ? "bg-primary/10 text-primary"
                         : "hover:bg-muted"
                     )}
-                    onClick={() => item.items && toggleExpanded(item.title)}
+                    onClick={() => window.location.href = item.url || "#"}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon}
                       <span>{item.title}</span>
                     </div>
-                    
-                    {item.items && (
-                      <ChevronDown
-                        className={cn(
-                          "ml-2 h-4 w-4 transition-transform",
-                          expandedItems[item.title] ? "rotate-180" : ""
-                        )}
-                      />
-                    )}
+
+          
                   </button>
 
-                  {item.items && expandedItems[item.title] && (
-                    <div className="mt-1 ml-6 space-y-1 border-l pl-3">
-                      {item.items.map((subItem) => (
-                        <a
-                          key={subItem.title}
-                          href={subItem.url}
-                          className="flex items-center justify-between rounded-2xl px-3 py-2 text-sm hover:bg-muted"
-                        >
-                          {subItem.title}
-                      
-                        </a>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
           </ScrollArea>
-
-          
         </div>
       </div>
 
@@ -245,7 +221,6 @@ export default function MessagesDashboard() {
             </div>
           </div>
 
-
           <ScrollArea className="flex-1 px-3 py-2">
             <div className="space-y-1">
               {sidebarItems.map((item) => (
@@ -255,44 +230,19 @@ export default function MessagesDashboard() {
                       "flex w-full items-center justify-between rounded-2xl px-3 py-2 text-sm font-medium",
                       item.isActive
                         ? "bg-primary/10 text-primary"
-                        : "hover:bg-muted"
+                        : "hover:bg-amber-800/20"
                     )}
-                    onClick={() => item.items && toggleExpanded(item.title)}
+                    onClick={() => window.location.href = item.url || "#"}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon}
                       <span>{item.title}</span>
                     </div>
-                    
-                    {item.items && (
-                      <ChevronDown
-                        className={cn(
-                          "ml-2 h-4 w-4 transition-transform",
-                          expandedItems[item.title] ? "rotate-180" : ""
-                        )}
-                      />
-                    )}
                   </button>
-
-                  {item.items && expandedItems[item.title] && (
-                    <div className="mt-1 ml-6 space-y-1 border-l pl-3">
-                      {item.items.map((subItem) => (
-                        <a
-                          key={subItem.title}
-                          href={subItem.url}
-                          className="flex items-center justify-between rounded-2xl px-3 py-2 text-sm hover:bg-muted"
-                        >
-                          
-                        </a>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
           </ScrollArea>
-
-          
         </div>
       </div>
 
@@ -355,47 +305,7 @@ export default function MessagesDashboard() {
         </header>
 
         <main className="flex-1 p-4 md:p-6">
-          <Tabs
-            defaultValue="home"
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <TabsList className="grid w-full max-w-[600px] grid-cols-4 rounded-2xl p-1">
-                <TabsTrigger
-                  value="home"
-                  className="rounded-xl data-[state=active]:rounded-xl"
-                >
-                  Tất cả
-                </TabsTrigger>
-                <TabsTrigger
-                  value="apps"
-                  className="rounded-xl px-2 data-[state=active]:rounded-xl"
-                >
-                  Đang chờ khám
-                </TabsTrigger>
-                <TabsTrigger
-                  value="files"
-                  className="rounded-xl data-[state=active]:rounded-xl"
-                >
-                  Đang khám
-                </TabsTrigger>
-                <TabsTrigger
-                  value="projects"
-                  className="rounded-xl data-[state=active]:rounded-xl"
-                >
-                  Đã khám
-                </TabsTrigger>
-              </TabsList>
-              <div className="hidden md:flex gap-2">
-                <Button className="rounded-2xl max-w-[150px] whitespace-normal text-center leading-snug break-words h-10 px-4 py-2 flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white">
-                  <Plus className="h-4 w-4" />
-                  Tạo bản ghi khám bệnh
-                </Button>
-              </div>
-            </div>
-          </Tabs>
+         
         </main>
       </div>
     </div>
