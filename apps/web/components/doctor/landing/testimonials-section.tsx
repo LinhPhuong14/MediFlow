@@ -1,133 +1,132 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import { TestimonialsColumn } from "@/components/ui/testimonials-column"
+import { Button } from "@/components/ui/button";
+import { Check, Star } from "lucide-react";
+import { ScrollObserver } from "./scroll-observer";
 
-export function TestimonialsSection() {
-  const sectionRef = useRef<HTMLElement>(null)
+const plans = [
+  {
+    name: "Gói CƠ BẢN",
+    price: "25.000.000đ",
+    period: "/tháng",
+    description: "Dành cho các phòng khám < 20 bác sĩ",
+    features: [
+      "AI Chatbot cơ bản",
+      "Quy trình đặt lịch",
+      "Báo cáo tổng quát cơ bản",
+      "MediVoice",
+      "Tin nhắn nội bộ",
+    ],
+    popular: false,
+    buttonText: "Bắt đầu",
+    buttonVariant: "outline" as const,
+  },
+  {
+    name: "Gói CHUYÊN NGHIỆP",
+    price: "80.000.000đ",
+    period: "/tháng",
+    description: "Trải nghiệm toàn diện với AI thông minh",
+    features: [
+      "AI Speaking Teacher không giới hạn",
+      "Flashcards không giới hạn",
+      "Báo cáo học tập chi tiết",
+      "Test đầu vào + Review test",
+      "Pomodoro & Schedule thông minh",
+      "Cá nhân hóa hoàn toàn",
+      "Hỗ trợ ưu tiên 24/7",
+    ],
+    popular: true,
+    buttonText: "Nâng cấp Premium",
+    buttonVariant: "default" as const,
+  },
+  {
+    name: "Gói TẬP ĐOÀN",
+    price: "80.000.000đ",
+    period: "/tháng",
+    description: "Trải nghiệm toàn diện với AI thông minh",
+    features: [
+      "AI Speaking Teacher không giới hạn",
+      "Flashcards không giới hạn",
+      "Báo cáo học tập chi tiết",
+      "Test đầu vào + Review test",
+      "Pomodoro & Schedule thông minh",
+      "Cá nhân hóa hoàn toàn",
+      "Hỗ trợ ưu tiên 24/7",
+    ],
+    popular: false,
+    buttonText: "Nâng cấp Premium",
+    buttonVariant: "default" as const,
+  },
+];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const elements = entry.target.querySelectorAll(".fade-in-element")
-            elements.forEach((element, index) => {
-              setTimeout(() => {
-                element.classList.add("animate-fade-in-up")
-              }, index * 300)
-            })
-          }
-        })
-      },
-      { threshold: 0.1 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
-
-  const testimonials = [
-    {
-      text: "We went from missing 70% of after-hours inquiries to capturing every single lead. Customer bookings increased 50% in the first month.",
-      name: "Mike Rodriguez",
-      role: "Business Owner",
-    },
-    {
-      text: "We spend so much less time thinking about lead response because of the instant engagement Cliste offers us.",
-      name: "Sarah Chen",
-      role: "Sales Manager",
-    },
-    {
-      text: "With Cliste, our conversion rates increased by 85% and boosted our weekend revenue by 40%.",
-      name: "Michael Torres",
-      role: "General Manager",
-    },
-    {
-      text: "The AI handles customer questions 24/7, so we never miss a potential sale. Our team can focus on closing deals instead of answering basic questions.",
-      name: "Jennifer Walsh",
-      role: "Operations Director",
-    },
-    {
-      text: "Customer satisfaction scores improved dramatically since implementing Cliste. Clients love the instant responses and personalized recommendations.",
-      name: "David Kim",
-      role: "Customer Experience Manager",
-    },
-    {
-      text: "Our retail store saw a 60% increase in qualified leads. The chatbot handles product inquiries perfectly while we focus on in-person customers.",
-      name: "Lisa Thompson",
-      role: "Store Manager",
-    },
-    {
-      text: "Property inquiries are handled instantly now. We've closed 3x more deals since implementing Cliste's AI assistant.",
-      name: "James Wilson",
-      role: "Real Estate Broker",
-    },
-    {
-      text: "Hotel bookings increased 45% with 24/7 availability. Guests get immediate answers about amenities and availability.",
-      name: "Maria Garcia",
-      role: "Hospitality Manager",
-    },
-  ]
-
+export function PricingPlans() {
   return (
-    <section id="testimonials" ref={sectionRef} className="relative pt-16 pb-16 px-4 sm:px-6 lg:px-8">
-      {/* Grid Background */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="h-full w-full"
-          style={{
-            backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-          `,
-            backgroundSize: "80px 80px",
-          }}
-        />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto">
-        {/* Header Section - Keep as user loves it */}
-        <div className="text-center mb-16 md:mb-32">
-          <div className="fade-in-element opacity-0 translate-y-8 transition-all duration-1000 ease-out inline-flex items-center gap-2 text-white/60 text-sm font-medium tracking-wider uppercase mb-6">
-            <div className="w-8 h-px bg-white/30"></div>
-            Success Stories
-            <div className="w-8 h-px bg-white/30"></div>
-          </div>
-          <h2 className="fade-in-element opacity-0 translate-y-8 transition-all duration-1000 ease-out text-5xl md:text-6xl lg:text-7xl font-light text-white mb-8 tracking-tight text-balance">
-            The businesses we <span className="font-medium italic">empower</span>
+    <section id="pricing" className="py-20 ">
+      <div className="w-full px-4">
+        <ScrollObserver className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Các <span className="text-teal-600">chương trình</span> của MediFlow
           </h2>
-          <p className="fade-in-element opacity-0 translate-y-8 transition-all duration-1000 ease-out text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
-            Discover how leading businesses are transforming their customer engagement with AI-powered chat solutions
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Chọn quy mô phù hợp cho phòng khám của bạn
           </p>
-        </div>
+        </ScrollObserver>
 
-        {/* Testimonials Carousel */}
-        <div className="fade-in-element opacity-0 translate-y-8 transition-all duration-1000 ease-out relative flex justify-center items-center min-h-[600px] md:min-h-[800px] overflow-hidden">
-          <div
-            className="flex gap-8 max-w-6xl"
-            style={{
-              maskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
-            }}
-          >
-            <TestimonialsColumn testimonials={testimonials.slice(0, 3)} duration={15} className="flex-1" />
-            <TestimonialsColumn
-              testimonials={testimonials.slice(2, 5)}
-              duration={12}
-              className="flex-1 hidden md:block"
-            />
-            <TestimonialsColumn
-              testimonials={testimonials.slice(1, 4)}
-              duration={18}
-              className="flex-1 hidden lg:block"
-            />
-          </div>
+        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+          {plans.map((plan, index) => (
+            <ScrollObserver
+              key={index}
+              className={`relative bg-white rounded-2xl shadow-xl border-2 p-8 ${
+                plan.popular
+                  ? "border-teal-400 transform scale-105"
+                  : "border-gray-200"
+              }`}
+            >
+              {plan.popular && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <div className="bg-teal-400 text-white px-6 py-2 rounded-full text-sm font-semibold flex items-center">
+                    <Star className="w-4 h-4 mr-1" />
+                    Phổ biến nhất
+                  </div>
+                </div>
+              )}
+
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  {plan.name}
+                </h3>
+                <p className="text-gray-600 mb-4">{plan.description}</p>
+                <div className="flex items-baseline justify-center">
+                  <span className="text-4xl font-bold text-teal-400">
+                    {plan.price}
+                  </span>
+                  <span className="text-gray-500 ml-1">{plan.period}</span>
+                </div>
+              </div>
+
+              <ul className="space-y-4 mb-8">
+                {plan.features.map((feature, featureIndex) => (
+                  <li key={featureIndex} className="flex items-center">
+                    <Check className="w-5 h-5 text-teal-400 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button
+                className={`w-full py-3 text-lg font-semibold rounded-full ${
+                  plan.popular
+                    ? "bg-teal-400 hover:bg-teal-500 text-white"
+                    : "border-teal-400 text-teal-400 hover:bg-teal-50"
+                }`}
+                variant={plan.buttonVariant}
+              >
+                {plan.buttonText}
+              </Button>
+            </ScrollObserver>
+          ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

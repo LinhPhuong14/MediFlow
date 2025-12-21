@@ -5,7 +5,7 @@ import "./globals.css";
 
 
 export const metadata: Metadata = {
-  title: "Mediflow",
+  title: "Mediflow-Doctor",
   description: "Intelligent Healthcare Management System",
 };
 
