@@ -19,11 +19,9 @@ interface Message {
   timestamp: Date;
 }
 
-/**
- * Narrow SpeechRecognition types
- * (avoid redeclaring Window interface)
- */
-type SpeechRecognitionConstructor = new () => SpeechRecognition;
+type SpeechRecognitionConstructor =
+  | typeof window.SpeechRecognition
+  | typeof window.webkitSpeechRecognition;
 
 /* =======================
    Component
@@ -71,14 +69,13 @@ export default function Chatbot() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const SpeechRecognitionCtor = (window.SpeechRecognition ||
-      window.webkitSpeechRecognition) as
-      | SpeechRecognitionConstructor
-      | undefined;
+    const SpeechRecognitionCtor =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognitionCtor) return;
 
     const recognition = new SpeechRecognitionCtor();
+
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "vi-VN";
