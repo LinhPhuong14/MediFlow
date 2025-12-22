@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose"
 import bcrypt from "bcryptjs"
 
 /* =======================
-   Interfaces
+   Types
 ======================= */
 
 export type UserRole = "ADMIN_SUPER" | "ADMIN_DOCTOR"
@@ -12,13 +12,12 @@ export interface IUser extends Document {
   email: string
   password?: string
   role: UserRole
-  // chỉ dùng cho ADMIN_DOCTOR
   departmentId?: string
   doctorCode?: string
   status: "ACTIVE" | "INACTIVE"
   createdAt: Date
   updatedAt: Date
-  // methods
+
   comparePassword(password: string): Promise<boolean>
   isSuperAdmin(): boolean
   isDoctorAdmin(): boolean
@@ -34,7 +33,7 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
       trim: true,
-      maxlength: 100
+      maxlength: 100,
     },
 
     email: {
@@ -43,42 +42,42 @@ const userSchema = new Schema<IUser>(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/^\S+@\S+\.\S+$/, "Invalid email"]
+      match: [/^\S+@\S+\.\S+$/, "Invalid email"],
     },
 
     password: {
       type: String,
       select: false,
-      minlength: 6
+      minlength: 6,
     },
 
     role: {
       type: String,
       enum: ["ADMIN_SUPER", "ADMIN_DOCTOR"],
-      required: true
+      required: true,
     },
 
     departmentId: {
       type: String,
       default: null,
-      index: true
+      index: true,
     },
 
     doctorCode: {
       type: String,
       default: null,
-      index: true
+      index: true,
     },
 
     status: {
       type: String,
       enum: ["ACTIVE", "INACTIVE"],
-      default: "ACTIVE"
-    }
+      default: "ACTIVE",
+    },
   },
   {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
   }
 )
 
@@ -93,15 +92,11 @@ userSchema.index({ departmentId: 1 })
    Hooks
 ======================= */
 
-userSchema.pre("save", async function (this: IUser, next: (err?: Error) => void) {
-  if (!this.isModified("password") || !this.password) return next()
+userSchema.pre("save", async function () {
+  // `this` is a mongoose document
+  if (!this.isModified("password") || !this.password) return
 
-  try {
-    this.password = await bcrypt.hash(this.password, 12)
-    next()
-  } catch (err) {
-    next(err as Error)
-  }
+  this.password = await bcrypt.hash(this.password, 12)
 })
 
 /* =======================
