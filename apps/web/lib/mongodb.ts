@@ -1,65 +1,75 @@
 /* -------------------------------------------------------------------------- */
-/*                           MongoDB singleton helper                         */
+/*                           MongoDB singleton helper                          */
 /* -------------------------------------------------------------------------- */
 
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || process.env.DATABASE_URL || ""
+const MONGODB_URI =
+  process.env.MONGODB_URI || process.env.DATABASE_URL;
 
 if (!MONGODB_URI) {
-  throw new Error("❌  Missing MongoDB connection string. Set MONGODB_URI or DATABASE_URL.")
+  throw new Error(
+    "❌ Missing MongoDB connection string. Set MONGODB_URI or DATABASE_URL."
+  );
 }
 
-/**
- * We cache the connection across hot-reloads in dev (and across
- * lambda invocations in production) so we don’t create new
- * connections on every function call.
- */
+const mongoUri = MONGODB_URI as string;
+
+/* ========================
+   Global cache typing
+======================== */
+
+type MongooseCache = {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+};
+
 declare global {
   // eslint-disable-next-line no-var
-  var _mongoose:
-    | {
-        conn: typeof mongoose | null
-        promise: Promise<typeof mongoose> | null
-      }
-    | undefined
-}
-
-let cached = global._mongoose
-
-if (!cached) {
-  cached = global._mongoose = { conn: null, promise: null }
+  var _mongoose: MongooseCache | undefined;
 }
 
 /**
- * Get (or create) a stable Mongoose connection.
+ * Ensure cached is ALWAYS defined
+ * 👉 this is the key fix
  */
-export async function dbConnect() {
-  if (cached.conn) return cached.conn
+const cached: MongooseCache =
+  global._mongoose ?? (global._mongoose = { conn: null, promise: null });
+
+/* ========================
+   Connection helper
+======================== */
+
+export async function dbConnect(): Promise<typeof mongoose> {
+  if (cached.conn) {
+    return cached.conn;
+  }
 
   if (!cached.promise) {
     cached.promise = mongoose
-      .connect(MONGODB_URI, {
+      .connect(mongoUri, {
         bufferCommands: false,
-        // feel free to tweak pool / timeout options
       })
-      .then((m) => m)
+      .then((m) => m);
   }
 
-  cached.conn = await cached.promise
-  return cached.conn
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
 /* -------------------------------------------------------------------------- */
-/*                        Convenience aliases / helpers                       */
+/*                        Convenience aliases / helpers                        */
 /* -------------------------------------------------------------------------- */
 
-export { dbConnect as connectDB }
+export { dbConnect as connectDB };
 
-/** Close the cached connection — rarely needed outside tests. */
+/**
+ * Close the cached connection — mostly for tests
+ */
 export async function dbDisconnect() {
-  if (!cached?.conn) return
-  await cached.conn.disconnect()
-  cached.conn = null
-  cached.promise = null
+  if (!cached.conn) return;
+
+  await cached.conn.disconnect();
+  cached.conn = null;
+  cached.promise = null;
 }
