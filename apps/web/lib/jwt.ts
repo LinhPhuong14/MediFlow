@@ -1,18 +1,18 @@
-import jwt, { JwtPayload, TokenExpiredError, JsonWebTokenError } from "jsonwebtoken"
+import jwt, { JwtPayload, TokenExpiredError, JsonWebTokenError, Secret } from "jsonwebtoken"
 import { jwtVerify } from "jose";
 
-const JWT_SECRET = process.env.JWT_SECRET!
+const JWT_SECRET: Secret = process.env.JWT_SECRET as Secret;
 
-if (!JWT_SECRET) throw new Error("JWT_SECRET is not defined")
-
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined");
+}
 // ========================
 // ✅ Dùng cho SERVER (Node.js)
 // ========================
-export function signToken(payload: object, expiresIn: string = "7d"): string {
-  console.log("🔑 [JWT] Signing token with payload:", { ...payload, expiresIn });
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn });
-  console.log("✅ [JWT] Token signed successfully");
-  return token;
+export function signToken(payload: object): string {
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days (seconds)
+  });
 }
 
 export function verifyToken<T extends object = JwtPayload>(token: string): T {
