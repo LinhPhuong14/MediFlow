@@ -7,21 +7,27 @@ import jwt, {
 import { jwtVerify } from "jose";
 
 /* ========================
-   ENV
+   ENV (TYPE-SAFE)
 ======================== */
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const rawSecret = process.env.JWT_SECRET;
 
-if (!JWT_SECRET) {
+if (!rawSecret) {
   throw new Error("❌ JWT_SECRET is not defined");
 }
+
+/**
+ * 🔒 IMPORTANT
+ * After runtime check, assert type for TS
+ */
+const JWT_SECRET: string = rawSecret;
 
 /* ========================
    SERVER (Node.js)
 ======================== */
 
 /**
- * Sign JWT (Node.js only)
+ * Sign JWT (Node runtime only)
  */
 export function signToken(
   payload: object,
@@ -35,7 +41,7 @@ export function signToken(
 }
 
 /**
- * Verify JWT (Node.js only)
+ * Verify JWT (Node runtime only)
  */
 export function verifyToken<T extends object = JwtPayload>(token: string): T {
   console.log("🔍 [JWT] Verifying token (Node)");
@@ -56,7 +62,7 @@ export function verifyToken<T extends object = JwtPayload>(token: string): T {
 }
 
 /**
- * Decode JWT without verification (Node.js only)
+ * Decode JWT without verification
  */
 export function decodeToken(token: string): JwtPayload | null {
   try {
@@ -68,7 +74,7 @@ export function decodeToken(token: string): JwtPayload | null {
 }
 
 /**
- * Check token expiration (Node.js only)
+ * Check expiration
  */
 export function isTokenExpired(token: string): boolean {
   const decoded = decodeToken(token);
@@ -79,16 +85,16 @@ export function isTokenExpired(token: string): boolean {
 }
 
 /* ========================
-   EDGE (Middleware / Vercel)
+   EDGE (Middleware)
 ======================== */
 
 /**
- * Edge runtime requires Uint8Array secret
+ * jose requires Uint8Array secret
  */
 const joseSecret = new TextEncoder().encode(JWT_SECRET);
 
 /**
- * Verify JWT in Edge (Middleware)
+ * Verify JWT in Edge Runtime
  */
 export async function verifyTokenEdge(
   token: string
