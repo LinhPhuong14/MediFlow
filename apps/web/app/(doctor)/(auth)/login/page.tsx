@@ -53,10 +53,10 @@ export default function LoginPage() {
   }) => {
     try {
       setError("");
-      const res = await loginWithGoogle(user);
-      console.log("Google login result:", res);
-      if (res.success) await router.push("/dashboard");
-      else throw new Error(res.message);
+      console.log("Google user:", user);
+
+      // ✅ Auth + cookie đã xong ở GoogleAuthButton
+      router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Google đăng nhập thất bại");
     }
@@ -140,7 +140,6 @@ export default function LoginPage() {
               <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
                 Đăng nhập
               </CardTitle>
-             
             </CardHeader>
 
             <CardContent className="space-y-6">
@@ -231,9 +230,9 @@ export default function LoginPage() {
                 )}
 
                 <Button
-                size="lg"
-                className="shadow-3xl w-full border-2 border-white bg-gradient-to-r rounded-full from-blue-600/80 to-green-600/10  hover:from-blue-300 hover:to-green-400 text-white px-8 py-4 text-lg group"
-              >
+                  size="lg"
+                  className="shadow-3xl w-full border-2 border-white bg-gradient-to-r rounded-full from-blue-600/80 to-green-600/10  hover:from-blue-300 hover:to-green-400 text-white px-8 py-4 text-lg group"
+                >
                   {isLoading ? (
                     <div className="flex items-center space-x-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
