@@ -27,11 +27,11 @@ const plans = [
     period: "/tháng",
     description: "Trải nghiệm toàn diện với AI thông minh",
     features: [
-      "AI Speaking Teacher không giới hạn",
-      "Flashcards không giới hạn",
-      "Báo cáo học tập chi tiết",
-      "Test đầu vào + Review test",
-      "Pomodoro & Schedule thông minh",
+      "Băng thông người dùng tăng",
+      "AI chatbot custom tính cách",
+      "Hệ thống AI Agent nội bộ",
+      "Báo cáo tổng quát nâng cao",
+      "Schedule thông minh",
       "Cá nhân hóa hoàn toàn",
       "Hỗ trợ ưu tiên 24/7",
     ],
@@ -41,21 +41,23 @@ const plans = [
   },
   {
     name: "Gói TẬP ĐOÀN",
-    price: "80.000.000đ",
+    price: "225.000.000đ",
     period: "/tháng",
     description: "Trải nghiệm toàn diện với AI thông minh",
     features: [
-      "AI Speaking Teacher không giới hạn",
-      "Flashcards không giới hạn",
-      "Báo cáo học tập chi tiết",
-      "Test đầu vào + Review test",
-      "Pomodoro & Schedule thông minh",
+      "Không giới hạn số lượng bệnh nhân",
+      "AI chatbot custom tính cách",
+      "Hệ thống AI Agent nội bộ",
+      "Báo cáo tổng quát nâng cao",
+      "Schedule thông minh",
       "Cá nhân hóa hoàn toàn",
       "Hỗ trợ ưu tiên 24/7",
+      "Quản lý đa chi nhánh",
+      "Tích hợp hệ thống nâng cao",
     ],
     popular: false,
     buttonText: "Nâng cấp Premium",
-    buttonVariant: "default" as const,
+    buttonVariant: "outline" as const,
   },
 ];
 
@@ -114,10 +116,10 @@ export function PricingPlans() {
               </ul>
 
               <Button
-                className={`w-full py-3 text-lg font-semibold rounded-full ${
+                className={`w-full bottom-0 py-3 text-lg font-semibold rounded-full ${
                   plan.popular
                     ? "bg-teal-400 hover:bg-teal-500 text-white"
-                    : "border-teal-400 text-teal-400 hover:bg-teal-50"
+                    : "border-teal-400 bg-white text-teal-400 hover:bg-teal-50"
                 }`}
                 variant={plan.buttonVariant}
               >

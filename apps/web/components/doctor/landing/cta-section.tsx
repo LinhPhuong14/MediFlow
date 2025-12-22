@@ -177,7 +177,7 @@ export function ContactSection() {
                     Nội dung
                   </label>
                   <Textarea
-                    placeholder="Bạn có câu hỏi gì?&#10;• Hãy cho GIPHE biết trình độ hiện tại&#10;• Mục tiêu mong muốn"
+                    placeholder="Câu hỏi hoặc yêu cầu của bạn..."
                     rows={4}
                     className="font-montserrat dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                   />
