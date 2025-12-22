@@ -21,7 +21,7 @@ interface Message {
 
 type SpeechRecognitionCtor =
   | typeof window.SpeechRecognition
-  | typeof window.webkitSpeechRecognition
+  | typeof window.webkitSpeechRecognition;
 
 /* =======================
    Component
@@ -66,59 +66,59 @@ export default function Chatbot() {
      Init Speech Recognition
   ======================= */
 
- useEffect(() => {
-  if (typeof window === "undefined") return;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-  const SpeechRecognitionCtor =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognitionCtor =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  if (!SpeechRecognitionCtor) {
-    console.warn("SpeechRecognition not supported");
-    return;
-  }
+    if (!SpeechRecognitionCtor) {
+      console.warn("SpeechRecognition not supported");
+      return;
+    }
 
-  const recognition = new SpeechRecognitionCtor();
+    const recognition = new SpeechRecognitionCtor();
 
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = "vi-VN";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "vi-VN";
 
-  recognition.onresult = (event: SpeechRecognitionEvent) => {
-    let finalTranscript = "";
-    let interimTranscript = "";
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      let finalTranscript = "";
+      let interimTranscript = "";
 
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalTranscript += transcript;
-      } else {
-        interimTranscript += transcript;
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
       }
-    }
 
-    if (finalTranscript) {
-      setInputValue(finalTranscript);
+      if (finalTranscript) {
+        setInputValue(finalTranscript);
+        setCurrentTranscript("");
+        handleSendMessage(finalTranscript);
+      } else {
+        setCurrentTranscript(interimTranscript);
+      }
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
       setCurrentTranscript("");
-      handleSendMessage(finalTranscript);
-    } else {
-      setCurrentTranscript(interimTranscript);
-    }
-  };
+    };
 
-  recognition.onend = () => {
-    setIsRecording(false);
-    setCurrentTranscript("");
-  };
+    recognition.onerror = () => {
+      setIsRecording(false);
+      setCurrentTranscript("");
+    };
 
-  recognition.onerror = () => {
-    setIsRecording(false);
-    setCurrentTranscript("");
-  };
+    recognitionRef.current = recognition;
 
-  recognitionRef.current = recognition;
-
-  return () => recognition.abort();
-}, []);
+    return () => recognition.abort();
+  }, []);
 
   /* =======================
      Auto scroll
@@ -260,27 +260,39 @@ export default function Chatbot() {
       </div>
 
       {/* Input */}
-      <div className="border-t px-6 py-3 flex gap-2 items-center">
-        <Input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-          placeholder="Nhập câu hỏi..."
-          disabled={isTyping}
-          className="flex-1 w-3xl px-auto outline-grey"
-        />
+      <div className="border-t px-4 py-3 flex items-center gap-3 w-full bg-white">
+        <div className="flex-1">
+          <Input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+            placeholder="Nhập câu hỏi..."
+            disabled={isTyping}
+            /* flex-1 giúp input chiếm toàn bộ khoảng trống, w-full đảm bảo nó mở rộng tối đa */
+            className="w-full flex-1 outline-none focus-visible:ring-1 focus-visible:ring-gray-400"
+          />
+        </div>
 
-        <Button onClick={handleExpand} className="bg-red-600 rounded-full">
-          <Mic />
-        </Button>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Button
+            onClick={handleExpand}
+            className="bg-red-600 hover:bg-red-700 h-10 w-10 p-0 rounded-full flex items-center justify-center transition-colors"
+          >
+            <Mic size={20} />
+          </Button>
 
-        <Button
-          onClick={() => handleSendMessage()}
-          disabled={!inputValue.trim() || isTyping}
-          className="bg-blue-600 rounded-full"
-        >
-          {isTyping ? <Loader2 className="animate-spin" /> : <Send />}
-        </Button>
+          <Button
+            onClick={() => handleSendMessage()}
+            disabled={!inputValue.trim() || isTyping}
+            className="bg-blue-600 hover:bg-blue-700 h-10 w-10 p-0 rounded-full flex items-center justify-center transition-colors"
+          >
+            {isTyping ? (
+              <Loader2 className="animate-spin" size={20} />
+            ) : (
+              <Send size={20} />
+            )}
+          </Button>
+        </div>
       </div>
 
       <AnimatePresence initial={false}>

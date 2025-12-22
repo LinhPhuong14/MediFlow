@@ -1,43 +1,30 @@
-"use client";
-
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import HeroSection from "@/components/landingpage/hero-section";
-import LoadingScreen from "@/components/landingpage/loading-screen";
-import { AuroraBackground } from "@/components/ui/aurora-background";
+import { GlassmorphismNav } from "@/components/doctor/landing/glassmorphism-nav";
+import { HeroSection } from "@/components/doctor/landing/hero-section";
+import { ProblemSolutionSection } from "@/components/doctor/landing/problem-solution-section";
+import { FeaturesSection } from "@/components/doctor/landing/features-section";
+import { PricingPlans } from "@/components/doctor/landing/testimonials-section";
+import { ContactSection } from "@/components/doctor/landing/cta-section";
+import { Footer } from "@/components/doctor/landing/footer";
 import ShaderBackground from "@/components/landingpage/shader-background";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 export default function HomePage() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <>
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen key="loading" />}
-      </AnimatePresence>
-
-      {!isLoading && (
-        <ShaderBackground>
-          {/* <AuroraBackground> */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="w-full min-h-screen"
-            >
-              <HeroSection />
-            </motion.div>
-          {/* </AuroraBackground> */}
-        </ShaderBackground>
-      )}
-    </>
+    <AuroraBackground>
+      <div className="w-full min-h-screen overflow-hidden">
+        <main className="min-h-screen relative overflow-hidden">
+          
+          <div className="relative z-10 w-full">
+            <GlassmorphismNav />
+            <HeroSection />
+            <ProblemSolutionSection />
+            <FeaturesSection />
+            <PricingPlans />
+            <ContactSection />
+            <Footer />
+          </div>
+        </main>
+      </div>
+    </AuroraBackground>
   );
 }

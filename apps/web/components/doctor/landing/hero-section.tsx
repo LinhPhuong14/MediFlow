@@ -1,3 +1,6 @@
+'use client'
+
+import React from "react";
 import { Button } from "@/components/ui/button";
 import RotatingText from "./RotatingText";
 import ShaderBackground from "@/components/landingpage/shader-background";
@@ -79,8 +82,11 @@ export function HeroSection() {
           <Button
             size="lg"
             className="bg-white text-black rounded-full px-8 py-4 text-lg font-medium transition-all duration-300 hover:bg-gray-50 hover:scale-105 hover:shadow-lg group cursor-pointer relative overflow-hidden"
+            onClick={() => {
+              window.location.href = "/patient/register";
+            }}
           >
-            Đăng kí
+            Đăng kí khám bệnh
           </Button>
 
           <Button
