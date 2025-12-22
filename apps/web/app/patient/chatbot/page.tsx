@@ -19,9 +19,9 @@ interface Message {
   timestamp: Date;
 }
 
-type SpeechRecognitionConstructor =
+type SpeechRecognitionCtor =
   | typeof window.SpeechRecognition
-  | typeof window.webkitSpeechRecognition;
+  | typeof window.webkitSpeechRecognition
 
 /* =======================
    Component
@@ -66,56 +66,59 @@ export default function Chatbot() {
      Init Speech Recognition
   ======================= */
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+ useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    const SpeechRecognitionCtor =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognitionCtor =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    if (!SpeechRecognitionCtor) return;
+  if (!SpeechRecognitionCtor) {
+    console.warn("SpeechRecognition not supported");
+    return;
+  }
 
-    const recognition = new SpeechRecognitionCtor();
+  const recognition = new SpeechRecognitionCtor();
 
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = "vi-VN";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "vi-VN";
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let finalTranscript = "";
-      let interimTranscript = "";
+  recognition.onresult = (event: SpeechRecognitionEvent) => {
+    let finalTranscript = "";
+    let interimTranscript = "";
 
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript;
-        } else {
-          interimTranscript += transcript;
-        }
-      }
-
-      if (finalTranscript) {
-        setInputValue(finalTranscript);
-        setCurrentTranscript("");
-        handleSendMessage(finalTranscript);
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        finalTranscript += transcript;
       } else {
-        setCurrentTranscript(interimTranscript);
+        interimTranscript += transcript;
       }
-    };
+    }
 
-    recognition.onend = () => {
-      setIsRecording(false);
+    if (finalTranscript) {
+      setInputValue(finalTranscript);
       setCurrentTranscript("");
-    };
+      handleSendMessage(finalTranscript);
+    } else {
+      setCurrentTranscript(interimTranscript);
+    }
+  };
 
-    recognition.onerror = () => {
-      setIsRecording(false);
-      setCurrentTranscript("");
-    };
+  recognition.onend = () => {
+    setIsRecording(false);
+    setCurrentTranscript("");
+  };
 
-    recognitionRef.current = recognition;
+  recognition.onerror = () => {
+    setIsRecording(false);
+    setCurrentTranscript("");
+  };
 
-    return () => recognition.abort();
-  }, []);
+  recognitionRef.current = recognition;
+
+  return () => recognition.abort();
+}, []);
 
   /* =======================
      Auto scroll
