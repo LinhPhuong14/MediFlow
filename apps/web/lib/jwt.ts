@@ -1,84 +1,104 @@
-import jwt, { JwtPayload, TokenExpiredError, JsonWebTokenError, Secret } from "jsonwebtoken"
+import jwt, {
+  JwtPayload,
+  TokenExpiredError,
+  JsonWebTokenError,
+  SignOptions,
+} from "jsonwebtoken";
 import { jwtVerify } from "jose";
 
-const JWT_SECRET: Secret = process.env.JWT_SECRET as Secret;
+/* ========================
+   ENV
+======================== */
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined");
+  throw new Error("❌ JWT_SECRET is not defined");
 }
-// ========================
-// ✅ Dùng cho SERVER (Node.js)
-// ========================
-export function signToken(payload: object): string {
+
+/* ========================
+   SERVER (Node.js)
+======================== */
+
+/**
+ * Sign JWT (Node.js only)
+ */
+export function signToken(
+  payload: object,
+  expiresIn: SignOptions["expiresIn"] = "7d"
+): string {
+  console.log("🔑 [JWT] Signing token", { expiresIn });
+
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days (seconds)
+    expiresIn,
   });
 }
 
+/**
+ * Verify JWT (Node.js only)
+ */
 export function verifyToken<T extends object = JwtPayload>(token: string): T {
-  console.log("🔍 [JWT] Verifying token...");
-  
+  console.log("🔍 [JWT] Verifying token (Node)");
+
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as T;
-    console.log("✅ [JWT] Token verified successfully:", { userId: (decoded as any).id });
-    return decoded;
+    return jwt.verify(token, JWT_SECRET) as T;
   } catch (error) {
     if (error instanceof TokenExpiredError) {
-      console.error("❌ [JWT] Token expired:", error.message);
       throw new Error("TOKEN_EXPIRED");
-    } else if (error instanceof JsonWebTokenError) {
-      console.error("❌ [JWT] Invalid token:", error.message);
-      throw new Error("INVALID_TOKEN");
-    } else {
-      console.error("❌ [JWT] Token verification failed:", error);
-      throw new Error("TOKEN_VERIFICATION_FAILED");
     }
+
+    if (error instanceof JsonWebTokenError) {
+      throw new Error("INVALID_TOKEN");
+    }
+
+    throw new Error("TOKEN_VERIFICATION_FAILED");
   }
 }
 
+/**
+ * Decode JWT without verification (Node.js only)
+ */
 export function decodeToken(token: string): JwtPayload | null {
-  console.log("🔍 [JWT] Decoding token (without verification)...");
-  
   try {
     const decoded = jwt.decode(token);
-    const result = typeof decoded === "object" ? decoded : null;
-    console.log("✅ [JWT] Token decoded:", result ? { userId: (result as any).id, exp: result.exp } : null);
-    return result;
-  } catch (error) {
-    console.error("❌ [JWT] Token decode failed:", error);
+    return typeof decoded === "object" ? decoded : null;
+  } catch {
     return null;
   }
 }
 
+/**
+ * Check token expiration (Node.js only)
+ */
 export function isTokenExpired(token: string): boolean {
-  try {
-    const decoded = decodeToken(token);
-    if (!decoded || !decoded.exp) return true;
-    
-    const now = Math.floor(Date.now() / 1000);
-    const isExpired = decoded.exp < now;
-    console.log("🕐 [JWT] Token expiration check:", { exp: decoded.exp, now, isExpired });
-    return isExpired;
-  } catch (error) {
-    console.error("❌ [JWT] Token expiration check failed:", error);
-    return true;
-  }
+  const decoded = decodeToken(token);
+  if (!decoded?.exp) return true;
+
+  const now = Math.floor(Date.now() / 1000);
+  return decoded.exp < now;
 }
 
-// ========================
-// ✅ Dùng cho Middleware (Edge Runtime)
-// ========================
-const joseSecret = new TextEncoder().encode(JWT_SECRET); // convert string → Uint8Array
+/* ========================
+   EDGE (Middleware / Vercel)
+======================== */
 
-export async function verifyTokenEdge(token: string): Promise<JwtPayload | null> {
-  console.log("🔍 [JWT-EDGE] Verifying token in middleware...");
-  
+/**
+ * Edge runtime requires Uint8Array secret
+ */
+const joseSecret = new TextEncoder().encode(JWT_SECRET);
+
+/**
+ * Verify JWT in Edge (Middleware)
+ */
+export async function verifyTokenEdge(
+  token: string
+): Promise<JwtPayload | null> {
+  console.log("🔍 [JWT-EDGE] Verifying token");
+
   try {
     const { payload } = await jwtVerify(token, joseSecret);
-    console.log("✅ [JWT-EDGE] Token verified successfully:", { userId: (payload as any).id });
-    return payload;
-  } catch (err) {
-    console.error("❌ [JWT-EDGE] Middleware token verify failed:", err);
+    return payload as JwtPayload;
+  } catch {
     return null;
   }
 }
