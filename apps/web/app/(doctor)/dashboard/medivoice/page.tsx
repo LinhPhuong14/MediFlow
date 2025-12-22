@@ -59,6 +59,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -70,8 +71,69 @@ import {
 import { cn } from "@/lib/utils";
 import { url } from "inspector";
 
+// Sample data for recent files
+const recentFiles = [
+  {
+    name: "Báo cáo khám bệnh - Nguyễn Văn A.pdf",
+    app: "MediVoice",
+    modified: "2 ngày trước",
+    size: "1.5 MB",
+  },
+  {
+    name: "Báo cáo khám bệnh - Trần Thị B.pdf",
+    app: "MediVoice",
+    modified: "5 ngày trước",
+    size: "2.2 MB",
+  },
+  {
+    name: "Báo cáo khám bệnh - Lê Văn C.pdf",
+    app: "MediVoice",
+    modified: "1 tuần trước",
+    size: "1.8 MB",
+  },
+  {
+    name: "Báo cáo khám bệnh - Phạm Thị D.pdf",
+    app: "MediVoice",
+    modified: "2 tuần trước",
+    size: "2.5 MB",
+  },
+];
 
-
+// Sample data for projects
+const projects = [
+  {
+    name: "Phiên khám bệnh - Nguyễn Văn A",
+    description: "Báo cáo chi tiết về quá trình khám bệnh của bệnh nhân.",
+    dueDate: "30 Sep 2024",
+    progress: 75,
+    members: 3,
+    files: 5,
+  },
+  {
+    name: "Phiên khám bệnh - Trần Thị B",
+    description: "Báo cáo chi tiết về quá trình khám bệnh của bệnh nhân.",
+    dueDate: "15 Oct 2024",
+    progress: 50,
+    members: 4,
+    files: 8,
+  },
+  {
+    name: "Phiên khám bệnh - Lê Văn C",
+    description: "Báo cáo chi tiết về quá trình khám bệnh của bệnh nhân.",
+    dueDate: "01 Nov 2024",
+    progress: 30,
+    members: 2,
+    files: 3,
+  },
+  {
+    name: "Phiên khám bệnh - Phạm Thị D",
+    description: "Báo cáo chi tiết về quá trình khám bệnh của bệnh nhân.",
+    dueDate: "10 Dec 2024",
+    progress: 90,
+    members: 5,
+    files: 12,
+  },
+];
 // Sample data for sidebar navigation
 const sidebarItems = [
   {
@@ -89,7 +151,6 @@ const sidebarItems = [
     title: "Tin nhắn",
     icon: <Users />,
     url: "/dashboard/messages",
-    
   },
 ];
 
@@ -183,16 +244,13 @@ export default function MedivoiceDashboard() {
                         ? "bg-primary/10 text-primary"
                         : "hover:bg-muted"
                     )}
-                    onClick={() => window.location.href = item.url || "#"}
+                    onClick={() => (window.location.href = item.url || "#")}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon}
                       <span>{item.title}</span>
                     </div>
-
-          
                   </button>
-
                 </div>
               ))}
             </div>
@@ -233,7 +291,7 @@ export default function MedivoiceDashboard() {
                         ? "bg-primary/10 text-primary"
                         : "hover:bg-amber-800/20"
                     )}
-                    onClick={() => window.location.href = item.url || "#"}
+                    onClick={() => (window.location.href = item.url || "#")}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon}
@@ -272,7 +330,7 @@ export default function MedivoiceDashboard() {
             <PanelLeft className="h-5 w-5" />
           </Button>
           <div className="flex flex-1 items-center justify-between">
-            <h1 className="text-xl font-semibold">Tin nhắn nội bộ</h1>
+            <h1 className="text-xl font-semibold">MediVoice</h1>
             <div className="flex items-center gap-3">
               <TooltipProvider>
                 <Tooltip>
@@ -306,7 +364,154 @@ export default function MedivoiceDashboard() {
         </header>
 
         <main className="flex-1 p-4 md:p-6">
-         
+          <section>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="overflow-hidden rounded-3xl bg-transparent border-2 bg-clip-border border-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 p-8 text-teal-800"
+            >
+              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                <div className="space-y-4">
+                  <Badge className="bg-white/20 text-teal-800/50 hover:bg-white/30 rounded-xl">
+                    MediVoice
+                  </Badge>
+                  <h3 className="text-3xl font-bold">Tạo bản ghi mới</h3>
+
+                  <Button className="rounded-2xl bg-white text-teal-800/50 hover:bg-grey outline outline-1 outline-teal-800/20 hover:outline-teal-800/30">
+                    Bản ghi mới
+                  </Button>
+                </div>
+                <div className="hidden lg:block">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      duration: 50,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "linear",
+                    }}
+                    className="relative h-40 w-40"
+                  >
+                    <div className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md" />
+                    <div className="absolute inset-4 rounded-full bg-white/20" />
+                    <div className="absolute inset-8 rounded-full bg-white/30" />
+                    <div className="absolute inset-12 rounded-full bg-white/40" />
+                    <div className="absolute inset-16 rounded-full bg-white/50" />
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          </section>
+          <div className="pt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-semibold">Báo cáo khám bệnh</h2>
+                <Button
+                  variant="ghost"
+                  className="rounded-2xl"
+                  onClick={() =>
+                    (window.location.href = "/dashboard/medivoice/reports")
+                  }
+                >
+                  Xem thêm
+                </Button>
+              </div>
+              <div className="rounded-3xl border">
+                <div className="grid grid-cols-1 divide-y">
+                  {recentFiles.slice(0, 4).map((file) => (
+                    <motion.div
+                      key={file.name}
+                      whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
+                      className="flex items-center justify-between p-4"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-muted">
+                          {file.icon}
+                        </div>
+                        <div>
+                          <p className="font-medium">{file.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {file.app} • {file.modified}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {file.shared && (
+                          <Badge variant="outline" className="rounded-xl">
+                            <Users className="mr-1 h-3 w-3" />
+                            {file.collaborators}
+                          </Badge>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-xl"
+                        >
+                          Open
+                        </Button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-semibold">Bản ghi âm</h2>
+                <Button
+                  variant="ghost"
+                  className="rounded-2xl"
+                  onClick={() =>
+                    (window.location.href = "/dashboard/medivoice/records")
+                  }
+                >
+                  Xem thêm
+                </Button>
+              </div>
+              <div className="rounded-3xl border">
+                <div className="grid grid-cols-1 divide-y">
+                  {projects.slice(0, 3).map((project) => (
+                    <motion.div
+                      key={project.name}
+                      whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
+                      className="p-4"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-medium">{project.name}</h3>
+                        <Badge variant="outline" className="rounded-xl">
+                          Due {project.dueDate}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {project.description}
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                          <span>Progress</span>
+                          <span>{project.progress}%</span>
+                        </div>
+                        <Progress
+                          value={project.progress}
+                          className="h-2 rounded-xl"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between mt-3 text-sm text-muted-foreground">
+                        <div className="flex items-center">
+                          <Users className="mr-1 h-4 w-4" />
+                          {project.members} members
+                        </div>
+                        <div className="flex items-center">
+                          <FileText className="mr-1 h-4 w-4" />
+                          {project.files} files
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
         </main>
       </div>
     </div>

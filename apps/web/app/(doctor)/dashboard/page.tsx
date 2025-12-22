@@ -447,7 +447,8 @@ export default function HomeDashboard() {
                 </TabsTrigger>
               </TabsList>
               <div className="hidden md:flex gap-2">
-                <Button className="rounded-2xl max-w-[150px] whitespace-normal text-center leading-snug break-words h-10 px-4 py-2 flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white">
+                <Button className="rounded-2xl max-w-[150px] whitespace-normal text-center leading-snug break-words h-10 px-4 py-2 flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white"
+                onClick={() => window.location.href='/dashboard/medivoice'}>
                   <Plus className="h-4 w-4" />
                   Tạo bản ghi khám bệnh
                 </Button>
