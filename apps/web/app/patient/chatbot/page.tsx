@@ -1,27 +1,29 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Send, Loader2, Mic, MicOff } from "lucide-react"
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Send, Loader2, Mic, MicOff, X } from "lucide-react";
+import { VoiceController } from "@/components/voicebot/voice-controller";
+import ShaderBackground from "@/components/landingpage/shader-background";
 
 /* =======================
    Types
 ======================= */
 
 interface Message {
-  id: string
-  text: string
-  sender: "user" | "bot"
-  timestamp: Date
+  id: string;
+  text: string;
+  sender: "user" | "bot";
+  timestamp: Date;
 }
 
 /**
  * Narrow SpeechRecognition types
  * (avoid redeclaring Window interface)
  */
-type SpeechRecognitionConstructor = new () => SpeechRecognition
+type SpeechRecognitionConstructor = new () => SpeechRecognition;
 
 /* =======================
    Component
@@ -31,115 +33,131 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text:
-        "Xin chào! Tôi là MediGuide 🧑‍⚕️. Hãy mô tả nhu cầu khám bệnh của bạn để mình tư vấn khoa khám nhé!",
+      text: "Xin chào! Tôi là MediGuide 🧑‍⚕️. Hãy mô tả nhu cầu khám bệnh của bạn để mình tư vấn khoa khám nhé!",
       sender: "bot",
       timestamp: new Date(),
     },
-  ])
+  ]);
 
-  const [inputValue, setInputValue] = useState("")
-  const [isTyping, setIsTyping] = useState(false)
-  const [isRecording, setIsRecording] = useState(false)
-  const [currentTranscript, setCurrentTranscript] = useState("")
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [currentTranscript, setCurrentTranscript] = useState("");
 
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleExpand = () => {
+    setIsExpanded(true);
+  };
+
+  const handleClose = () => {
+    setIsExpanded(false);
+  };
+
+  useEffect(() => {
+    if (isExpanded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isExpanded]);
   /* =======================
      Init Speech Recognition
   ======================= */
 
   useEffect(() => {
-    if (typeof window === "undefined") return
+    if (typeof window === "undefined") return;
 
-    const SpeechRecognitionCtor =
-      (window.SpeechRecognition ||
-        window.webkitSpeechRecognition) as SpeechRecognitionConstructor | undefined
+    const SpeechRecognitionCtor = (window.SpeechRecognition ||
+      window.webkitSpeechRecognition) as
+      | SpeechRecognitionConstructor
+      | undefined;
 
-    if (!SpeechRecognitionCtor) return
+    if (!SpeechRecognitionCtor) return;
 
-    const recognition = new SpeechRecognitionCtor()
-    recognition.continuous = true
-    recognition.interimResults = true
-    recognition.lang = "vi-VN"
+    const recognition = new SpeechRecognitionCtor();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "vi-VN";
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let finalTranscript = ""
-      let interimTranscript = ""
+      let finalTranscript = "";
+      let interimTranscript = "";
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript
+        const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
-          finalTranscript += transcript
+          finalTranscript += transcript;
         } else {
-          interimTranscript += transcript
+          interimTranscript += transcript;
         }
       }
 
       if (finalTranscript) {
-        setInputValue(finalTranscript)
-        setCurrentTranscript("")
-        handleSendMessage(finalTranscript)
+        setInputValue(finalTranscript);
+        setCurrentTranscript("");
+        handleSendMessage(finalTranscript);
       } else {
-        setCurrentTranscript(interimTranscript)
+        setCurrentTranscript(interimTranscript);
       }
-    }
+    };
 
     recognition.onend = () => {
-      setIsRecording(false)
-      setCurrentTranscript("")
-    }
+      setIsRecording(false);
+      setCurrentTranscript("");
+    };
 
     recognition.onerror = () => {
-      setIsRecording(false)
-      setCurrentTranscript("")
-    }
+      setIsRecording(false);
+      setCurrentTranscript("");
+    };
 
-    recognitionRef.current = recognition
+    recognitionRef.current = recognition;
 
-    return () => recognition.abort()
-  }, [])
+    return () => recognition.abort();
+  }, []);
 
   /* =======================
      Auto scroll
   ======================= */
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages, currentTranscript, isTyping])
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, currentTranscript, isTyping]);
 
   /* =======================
      Helpers
   ======================= */
 
-  const appendMessage = (msg: Message) =>
-    setMessages((prev) => [...prev, msg])
+  const appendMessage = (msg: Message) => setMessages((prev) => [...prev, msg]);
 
   const handleSendMessage = async (messageText?: string) => {
-    const userText = messageText || inputValue.trim()
-    if (!userText || isTyping) return
+    const userText = messageText || inputValue.trim();
+    if (!userText || isTyping) return;
 
-    setInputValue("")
-    setCurrentTranscript("")
+    setInputValue("");
+    setCurrentTranscript("");
 
     appendMessage({
       id: Date.now().toString(),
       text: userText,
       sender: "user",
       timestamp: new Date(),
-    })
+    });
 
-    setIsTyping(true)
+    setIsTyping(true);
 
     try {
       const res = await fetch("/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userText }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       appendMessage({
         id: (Date.now() + 1).toString(),
@@ -149,30 +167,30 @@ export default function Chatbot() {
           "Xin lỗi, tôi chưa trả lời được lúc này",
         sender: "bot",
         timestamp: new Date(),
-      })
+      });
     } catch {
       appendMessage({
         id: (Date.now() + 2).toString(),
         text: "Có lỗi kỹ thuật, bạn thử lại nhé!",
         sender: "bot",
         timestamp: new Date(),
-      })
+      });
     } finally {
-      setIsTyping(false)
+      setIsTyping(false);
     }
-  }
+  };
 
   const toggleRecording = () => {
-    if (!recognitionRef.current) return
+    if (!recognitionRef.current) return;
 
     if (isRecording) {
-      recognitionRef.current.stop()
+      recognitionRef.current.stop();
     } else {
-      recognitionRef.current.start()
+      recognitionRef.current.start();
     }
 
-    setIsRecording((prev) => !prev)
-  }
+    setIsRecording((prev) => !prev);
+  };
 
   /* =======================
      Render
@@ -252,11 +270,8 @@ export default function Chatbot() {
           className="flex-1 w-3xl px-auto outline-grey"
         />
 
-        <Button
-          onClick={toggleRecording}
-          className="bg-red-600 rounded-full"
-        >
-          {isRecording ? <MicOff /> : <Mic />}
+        <Button onClick={handleExpand} className="bg-red-600 rounded-full">
+          <Mic />
         </Button>
 
         <Button
@@ -267,6 +282,70 @@ export default function Chatbot() {
           {isTyping ? <Loader2 className="animate-spin" /> : <Send />}
         </Button>
       </div>
+
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+          <motion.div
+            layoutId="cta-card"
+            layout
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="
+            fixed inset-0 z-50
+            w-full h-full
+            max-w-none
+            overflow-hidden
+            transform-gpu will-change-transform
+          "
+            style={{ borderRadius: "0px" }} // full screen = no radius
+          >
+            <ShaderBackground>
+              {/* Overlay animation layer */}
+              <motion.div
+                initial={{ opacity: 0, scale: 1.2 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="inset-0 pointer-events-none"
+              />
+
+              {/* Content */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.15, duration: 0.4 }}
+                className="
+              relative z-50
+              flex flex-col lg:flex-row
+              w-full h-full
+            
+              gap-6 lg:gap-16
+              items-center justify-center
+            "
+              >
+                <VoiceController />
+              </motion.div>
+
+              {/* Close Button */}
+              <motion.button
+                onClick={handleClose}
+                aria-label="Close"
+                className="
+              fixed top-4 right-4 sm:top-6 sm:right-6
+              z-50
+              flex h-10 w-10 items-center justify-center
+              rounded-full
+              text-white
+              bg-white/10 backdrop-blur
+              hover:bg-white/20
+              transition
+            "
+              >
+                <X className="h-5 w-5 z-50" />
+              </motion.button>
+            </ShaderBackground>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
-  )
+  );
 }
