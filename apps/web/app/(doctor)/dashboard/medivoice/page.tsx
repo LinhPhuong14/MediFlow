@@ -436,12 +436,7 @@ export default function MedivoiceDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        {file.shared && (
-                          <Badge variant="outline" className="rounded-xl">
-                            <Users className="mr-1 h-3 w-3" />
-                            {file.collaborators}
-                          </Badge>
-                        )}
+                    
                         <Button
                           variant="ghost"
                           size="sm"
