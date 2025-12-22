@@ -425,9 +425,7 @@ export default function MedivoiceDashboard() {
                       className="flex items-center justify-between p-4"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-muted">
-                          {file.icon}
-                        </div>
+                        
                         <div>
                           <p className="font-medium">{file.name}</p>
                           <p className="text-sm text-muted-foreground">
