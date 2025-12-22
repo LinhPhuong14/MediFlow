@@ -31,12 +31,6 @@ interface SpeechRecognition extends EventTarget {
   onerror: (event: any) => void
 }
 
-declare global {
-  interface Window {
-    SpeechRecognition: new () => SpeechRecognition
-    webkitSpeechRecognition: new () => SpeechRecognition
-  }
-}
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
